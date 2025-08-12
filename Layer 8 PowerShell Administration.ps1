@@ -1,19 +1,15 @@
 $num = Read-Host "Enter a number"
 switch ($num){
 	1 {
-		Write-Host "Enter machine to ping"
-		$ping = Read-Host
-		ping $ping
+		
+		$list = 1
+		$1a = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
+		foreach($1 in $1a){
+			$list.ToString() + $1
+			$list++
+		}
 	}
 		
-	
-	2 {
-		$2a = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name | Out-GridView
-		Write-Host $2a
-	}
-		
-	
-	
 	
 	
 	
@@ -21,3 +17,4 @@ switch ($num){
 		Read-Host "Nuh uh try again (press enter)"
 }
 }
+
