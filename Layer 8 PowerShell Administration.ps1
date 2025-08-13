@@ -2,12 +2,20 @@ $num = Read-Host "Enter a number"
 switch ($num){
 	1 {
 		
-		$list = 1
-		$1a = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
+		$listArray = @()
+		$numList = 1
+		$1a = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name | Sort-Object -desc
 		foreach($1 in $1a){
-			$list.ToString() + $1
-			$list++
+			"(" + $numList.ToString() + ")" + $1
+			$numList++
+			$listArray += $1
 		}
+		
+		Write-Host "Choose a computer to ping"
+		$choose = Read-Host
+		$result = $listArray[$choose - 1]
+		Test-NetConnection $result
+		break
 	}
 		
 	
