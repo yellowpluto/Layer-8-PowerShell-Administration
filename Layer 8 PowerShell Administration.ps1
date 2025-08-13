@@ -1,11 +1,11 @@
 $num = Read-Host "Enter a number"
-switch ($num){
+switch ($num) {
 	1 {
 		
 		$listArray = @()
 		$numList = 1
 		$1a = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name | Sort-Object -desc
-		foreach($1 in $1a){
+		foreach ($1 in $1a) {
 			"(" + $numList.ToString() + ")" + $1
 			$numList++
 			$listArray += $1
@@ -22,7 +22,7 @@ switch ($num){
 		$listArray = @()
 		$numList = 1
 		$2a = Get-ADOrganizationalUnit -Filter * | Select-Object -ExpandProperty DistinguishedName | Sort-Object -desc
-		foreach($2 in $2a){
+		foreach ($2 in $2a) {
 			"(" + $numList.ToString() + ")" + $2
 			$numList++
 			$listArray += $2
@@ -33,7 +33,7 @@ switch ($num){
 		$result = $listArray[$choose - 1]
 		$users = @(Get-ADUser -Filter * -SearchBase $result | Select-Object -ExpandProperty Name)
 		$numList = 1
-		foreach($user in $users){
+		foreach ($user in $users) {
 			"(" + $numList.ToString() + ")" + $user
 			$numList++
 			$users += $users
@@ -43,13 +43,15 @@ switch ($num){
 		$choose = Read-Host
 		$result = $users[$choose - 1]
 		$if = Read-Host "Change password on next logon? (Y/N)"
-		if($if -eq "Y"){
+		if ($if -eq "Y") {
 			Set-ADUser -Identity $result -ChangePasswordAtLogon $true
 			Set-ADAccountPassword -Identity $result -Reset
-		}ElseIf($if -eq "N"){
+		}
+		ElseIf ($if -eq "N") {
 			Set-ADUser -Identity $result -ChangePasswordAtLogon $false
 			Set-ADAccountPassword -Identity $result -Reset
-		}Else{
+		}
+		Else {
 			Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset"
 			Set-ADAccountPassword -Identity $result -Reset
 		}
@@ -61,11 +63,13 @@ switch ($num){
 	3 {
 	
 		$condition = Read-Host "GPU and Restart Machines (Y/N)"
-			if($condition -eq "Y"){
-				Invoke-GPUpdate C-01 -Force -Boot
-			}ElseIf($condition -eq "N"){
-				Invoke-GPUpdate C-01 -Force
-			}Else{
+		if ($condition -eq "Y") {
+			Invoke-GPUpdate C-01 -Force -Boot
+		}
+		ElseIf ($condition -eq "N") {
+			Invoke-GPUpdate C-01 -Force
+		}
+		Else {
 			Write-Host -ForegroundColor Red "Incorrect value proceeding to regular update"
 			Invoke-GPUpdate C-01 -Force
 		}
@@ -82,5 +86,5 @@ switch ($num){
 	
 	default {
 		Read-Host "Relaunch script: Invalid Number (Press Enter)"
-}
+	}
 }
