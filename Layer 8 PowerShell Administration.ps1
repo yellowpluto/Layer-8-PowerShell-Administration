@@ -17,12 +17,29 @@ switch ($num){
 		Test-NetConnection $result
 		break
 	}
+	
+	2 {
+		$listArray = @()
+		$numList = 1
+		$2a = Get-ADOrganizationalUnit -Filter * | Select-Object -ExpandProperty DistinguishedName | Sort-Object -desc
+		foreach($2 in $2a){
+			"(" + $numList.ToString() + ")" + $2
+			$numList++
+			$listArray += $2
+		}
+		
+		Write-Host "Choose an OU"
+		$choose = Read-Host
+		$result = $listArray[$choose - 1]
+		Get-ADUser -Filter * -SearchBase $result | Select-Object -ExpandProperty Name
+		
+	}
+
 		
 	
 	
 	
 	default {
-		Read-Host "Nuh uh try again (press enter)"
+		Read-Host "Relaunch script: Invalid Number (Press Enter)"
 }
 }
-
