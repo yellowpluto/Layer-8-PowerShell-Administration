@@ -32,6 +32,9 @@ Write-Host -ForegroundColor Red @"
                                  ,,,,,,,,,,,,,,,                                
                                       ,,,,,                                     
 "@
+
+$start = 0
+while($start -eq 0){
 $num = Read-Host "Enter a number"
 switch ($num){
 	1 {
@@ -49,6 +52,7 @@ switch ($num){
 		$choose = Read-Host
 		$result = $listArray[$choose - 1]
 		Test-NetConnection $result
+        $start = 0
 		break
 	}
 	
@@ -88,7 +92,8 @@ switch ($num){
 			Set-ADAccountPassword -Identity $result -Reset
 		}
 			
-		break
+		$start = 0
+        break
 		
 	}
 	
@@ -103,13 +108,17 @@ switch ($num){
 			Write-Host -ForegroundColor Red "Incorrect value proceeding to regular update"
 			Invoke-GPUpdate NPOD1, NPOD2, NPOD3, NPOD4, WPOD1, WPOD2, WPOD3, WPOD4, LPOD1, LPOD2, LPOD3, LPOD4 -Force
 		}
-		break
+		
+        $start = 0
+        break
+     
 	}
 		
 	4 {
 	
 		Restart-Computer NPOD1, NPOD2, NPOD3, NPOD4, WPOD1, WPOD2, WPOD3, WPOD4, LPOD1, LPOD2, LPOD3, LPOD4 -Force -Confirm
-		break
+		$start = 0
+        break
 	}
 	
 	5 {
@@ -137,7 +146,7 @@ switch ($num){
 		}
 		
 		
-	
+	    $start = 0
 		break
 	}
 	
@@ -158,7 +167,8 @@ switch ($num){
 			
 		}
 		
-		break	
+		$start = 0
+        break	
 	
 	}
 	
@@ -176,7 +186,9 @@ switch ($num){
 		$result = $listArray[$choose - 1]
 		Write-Host -ForegroundColor Yellow "$result CHOSEN"
 		Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object {Set-ADUser -Identity $_ -EMailAddress "$_@AnimeHealth.net"}
-		break
+		
+        $start = 0
+        break
 	}
 	
 	<#
@@ -208,7 +220,7 @@ switch ($num){
 			Write-Host $output
 		}
 		
-		
+		$start = 0
 		break
 			
 	
@@ -219,13 +231,21 @@ switch ($num){
 	#test switch
 	999 {
 	
+		$numas = 0
+        while($numas -eq 0){
+        
+            $numas = Read-Host "Enter number"
+            Write-Host "test"
+        }
 		
-		
+
+        break
 	}
 	
 	
 	
 	default {
 		Read-Host "Relaunch script: Invalid Number (Press Enter)"
+}
 }
 }
