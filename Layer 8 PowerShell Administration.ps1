@@ -190,7 +190,6 @@ switch ($num){
 		$output = @()
 		
 		foreach($computer in $computers){
-<<<<<<< HEAD
 			if($computer -eq (Get-ComputerInfo | select-Object -ExpandProperty CsName)){
 				
 				$ipAddress = Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object {$_ -notlike "127.*"}
@@ -211,18 +210,7 @@ switch ($num){
 		
 		
 		break
-=======
 			
-			$ipAddress = Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object {$_ -notlike "127.*"}
-			$macAddress = Get-NetAdapter | select-Object -ExpandProperty MacAddress
-			$osName = Get-ComputerInfo | Select-Object -ExpandProperty osname
-			$output = @($computer + ": " + $macAddress + ", " + $ipAddress + ", " + $osName)
-		}
-		
-		Write-Host $output
-		
->>>>>>> 85ee8c77849f4d66312990ac1e71b73ffce47c17
-		
 	
 	}
 
