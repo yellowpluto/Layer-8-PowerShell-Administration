@@ -179,12 +179,36 @@ switch ($num){
 		break
 	}
 	
+	<#
+		Below are CCDC Scripts
+	#>
 	
+	101 {
 	
+		$fileName = Read-Host "Enter filename"
+		$computers = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
+		$output = @()
+		
+		foreach($computer in $computers){
+			
+			$ipAddress = Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object {$_ -notlike "127.*"}
+			$macAddress = Get-NetAdapter | select-Object -ExpandProperty MacAddress
+			$osName = Get-ComputerInfo | Select-Object -ExpandProperty osname
+			$output = @($computer + ": " + $macAddress + ", " + $ipAddress + ", " + $osName)
+		}
+		
+		Write-Host $output
+		
+		
+	
+	}
+
+
 
 	#test switch
 	999 {
 	
+		
 		
 	}
 	
