@@ -1,4 +1,3 @@
-$HELP = Import-Csv -Path .\HELP.csv
 Write-Host -ForegroundColor Red @"
                                                                                 
                                        ,,,                                      
@@ -54,7 +53,7 @@ Write-Host -ForegroundColor Red @"
 
 #>
 
-
+powershell -file .\Help.ps1
 $start = $true
 while($start -eq $true){
 $num = Read-Host "Enter a number (or type 'quit')[?]"
@@ -182,8 +181,8 @@ switch ($num){
 			$listArray += $6
 		}
 		
-		$input = Read-Host "Enter numbers"
-		$numbers = $input -split ',' | Where-Object { $_ -ne "" } | ForEach-Object { [int]$_ }
+		$inp = Read-Host "Enter numbers"
+		$numbers = $inp -split ',' | Where-Object { $_ -ne "" } | ForEach-Object { [int]$_ }
 		foreach($number in $numbers){
 			Clear-ADAccountExpiration -Identity $listArray[$number - 1]
 			
@@ -253,7 +252,7 @@ switch ($num){
 	#HELP
 	? {
 	
-		Write-Host $HELP
+		powershell -file .\Help.ps1
 	
 	}
 	
