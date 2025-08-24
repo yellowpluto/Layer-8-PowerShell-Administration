@@ -1,3 +1,4 @@
+$HELP = Import-Csv -Path .\HELP.csv
 Write-Host -ForegroundColor Red @"
                                                                                 
                                        ,,,                                      
@@ -33,9 +34,30 @@ Write-Host -ForegroundColor Red @"
                                       ,,,,,                                     
 "@
 
-$start = 0
-while($start -eq 0){
-$num = Read-Host "Enter a number"
+
+<# 
+
+	More info about scripts in 
+	CCDC Administration myBox
+
+	NOTE: It may not be up-to-date
+
+#>
+
+<#
+
+	NOTES ABOUT SCRIPT:
+		-CSV help file not displaying properly
+		-101 not finished
+		-2 needs to be updated with Get-Credential
+		-3 and 4 use static names
+
+#>
+
+
+$start = $true
+while($start -eq $true){
+$num = Read-Host "Enter a number (or type 'quit')[?]"
 switch ($num){
 	1 {
 		
@@ -52,7 +74,7 @@ switch ($num){
 		$choose = Read-Host
 		$result = $listArray[$choose - 1]
 		Test-NetConnection $result
-        $start = 0
+        
 		break
 	}
 	
@@ -92,7 +114,7 @@ switch ($num){
 			Set-ADAccountPassword -Identity $result -Reset
 		}
 			
-		$start = 0
+		
         break
 		
 	}
@@ -109,7 +131,7 @@ switch ($num){
 			Invoke-GPUpdate NPOD1, NPOD2, NPOD3, NPOD4, WPOD1, WPOD2, WPOD3, WPOD4, LPOD1, LPOD2, LPOD3, LPOD4 -Force
 		}
 		
-        $start = 0
+       
         break
      
 	}
@@ -117,7 +139,7 @@ switch ($num){
 	4 {
 	
 		Restart-Computer NPOD1, NPOD2, NPOD3, NPOD4, WPOD1, WPOD2, WPOD3, WPOD4, LPOD1, LPOD2, LPOD3, LPOD4 -Force -Confirm
-		$start = 0
+		
         break
 	}
 	
@@ -146,7 +168,7 @@ switch ($num){
 		}
 		
 		
-	    $start = 0
+	    
 		break
 	}
 	
@@ -167,7 +189,7 @@ switch ($num){
 			
 		}
 		
-		$start = 0
+		
         break	
 	
 	}
@@ -187,9 +209,11 @@ switch ($num){
 		Write-Host -ForegroundColor Yellow "$result CHOSEN"
 		Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object {Set-ADUser -Identity $_ -EMailAddress "$_@AnimeHealth.net"}
 		
-        $start = 0
+        
         break
 	}
+		
+	
 	
 	<#
 		Below are CCDC Scripts
@@ -197,7 +221,7 @@ switch ($num){
 	
 	101 {
 	
-		$fileName = Read-Host "Enter filename"
+		$fileName = Read-Host "Enter filename (UNFINISHED SCRIPT)"
 		$computers = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
 		$output = @()
 		
@@ -220,14 +244,30 @@ switch ($num){
 			Write-Host $output
 		}
 		
-		$start = 0
+		
 		break
 			
 	
 	}
 
-
-
+	#HELP
+	? {
+	
+		Write-Host $HELP
+	
+	}
+	
+	
+	#exit
+	
+	quit {
+	
+		$start = $false
+	
+	}
+		
+	
+	
 	#test switch
 	999 {
 	
@@ -245,7 +285,7 @@ switch ($num){
 	
 	
 	default {
-		Read-Host "Relaunch script: Invalid Number (Press Enter)"
+		Read-Host "Relaunch script: Invalid Number/Command (Press Enter)"
 }
 }
 }
