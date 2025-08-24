@@ -1,9 +1,9 @@
 Local,Remote
-1 - Ping machine in domain 
-2 - Password reset 
-3 - GP Update Pods 
-4 - Restart Pods 
-5 - Set expiration date for all users in specific OU 
-6 - Get rid of expiration date for specific users
-7 - Set email address for all users
-101(CCDC) - Get inventory for all machines across domain 
+1a - Ping machine in domain 
+2a - Password reset 
+3a - GP Update Pods 
+4a - Restart Pods 
+5a - Set expiration date for all users in specific OU 
+6a - Get rid of expiration date for specific users
+7a - Set email address for all users
+101a(CCDC) - Get inventory for all machines across domain 
