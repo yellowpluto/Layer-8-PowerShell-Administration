@@ -6,4 +6,5 @@ Local,Remote,Other
 5a - Set expiration date for all users in specific OU 
 6a - Get rid of expiration date for specific users
 7a - Set email address for all users
+100a(CCDC)(UF) - Enable PS Remoting on all machines across domain via GP (WinRM)
 101a(CCDC) - Get inventory for all machines across domain 

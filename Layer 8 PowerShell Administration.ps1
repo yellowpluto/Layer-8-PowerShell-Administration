@@ -222,6 +222,12 @@ while ($start -eq $true) {
 	#>
 		
 		
+		100a {
+		
+			
+		
+		}
+		
 		101a {
 
 			if (!(Test-Path -Path "C:\output")) {
@@ -276,7 +282,7 @@ while ($start -eq $true) {
 		
 			Write-Host -ForegroundColor Yellow "Local: Can only be run on computer connected to domain."
 			Write-Host -ForegroundColor Yellow "Remote: Can be run on any machine connected to a network (Uses WinRM)"
-			
+			Write-Host -ForegroundColor Yellow "(UF): Unfinished"
 		}
 	
 		#exit
@@ -292,15 +298,10 @@ while ($start -eq $true) {
 		#test switch
 		999 {
 	
-			$numas = 0
-			while ($numas -eq 0) {
-        
-				$numas = Read-Host "Enter number"
-				Write-Host "test"
-			}
-		
-
-			break
+			$gpoName = Read-Host "Enter GPO Name"
+			New-GPO $gpoName
+			New-GPLink -Name $gpoName -Target (Get-ADRootDSE | Select-Object -ExpandProperty rootDomainNamingContext)
+			
 		}
 	
 	
