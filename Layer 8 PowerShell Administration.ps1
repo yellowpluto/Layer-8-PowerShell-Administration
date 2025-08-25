@@ -53,7 +53,7 @@ Write-Host -ForegroundColor Red @"
 try {
 $credential = Get-Credential
 }
-catch{
+catch {
 Write-Host -ForegroundColor Yellow "No initial credential provided. This is fine."
 }
 powershell -file .\Help.ps1
