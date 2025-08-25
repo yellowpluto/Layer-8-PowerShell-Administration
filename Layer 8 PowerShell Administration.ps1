@@ -1,3 +1,4 @@
+Set-ExecutionPolicy -Scope Process Bypass
 Write-Host -ForegroundColor Red @"
                                                                                 
                                        ,,,                                      
@@ -46,17 +47,15 @@ Write-Host -ForegroundColor Red @"
 <#
 
 	NOTES ABOUT SCRIPT:
-		-CSV help file not displaying properly
-		-101 not finished
-		-2 needs to be updated with Get-Credential
 		-3 and 4 use static names
 
 #>
 
+$credential = Get-Credential
 powershell -file .\Help.ps1
 $start = $true
 while ($start -eq $true) {
-	$num = Read-Host "Enter a number (or type 'quit')[?]"
+	$num = Read-Host "Enter a number"
 	switch ($num) {
 		1a {
 		
@@ -103,16 +102,16 @@ while ($start -eq $true) {
 			$result = $users[$choose - 1]
 			$if = Read-Host "Change password on next logon? (Y/N)"
 			if ($if -eq "Y") {
-				Set-ADUser -Identity $result -ChangePasswordAtLogon $true
-				Set-ADAccountPassword -Identity $result -Reset
+				Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $true
+				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
 			}
 			ElseIf ($if -eq "N") {
-				Set-ADUser -Identity $result -ChangePasswordAtLogon $false
-				Set-ADAccountPassword -Identity $result -Reset
+				Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $false
+				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
 			}
 			Else {
 				Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset"
-				Set-ADAccountPassword -Identity $result -Reset
+				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
 			}
 			
 		
@@ -167,7 +166,7 @@ while ($start -eq $true) {
 			[string]$day = Read-Host "Enter day(ADD '/' @ END)"
 			[string]$date = $month + $day + $year
 			foreach ($user in $users) {
-				Set-ADAccountExpiration -Identity $user -DateTime $date
+				Set-ADAccountExpiration -Credential $credential -Identity $user -DateTime $date
 			}
 		
 		
@@ -210,7 +209,7 @@ while ($start -eq $true) {
 			$choose = Read-Host "Choose OU"
 			$result = $listArray[$choose - 1]
 			Write-Host -ForegroundColor Yellow "$result CHOSEN"
-			Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Identity $_ -EMailAddress "$_@AnimeHealth.net" }
+			Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Credential $credential -Identity $_ -EMailAddress "$_@AnimeHealth.net" }
 		
         
 			break
@@ -224,7 +223,7 @@ while ($start -eq $true) {
 	
 		101a {
 
-			if(!(Test-Path -Path "C:\output")) {
+			if (!(Test-Path -Path "C:\output")) {
 				New-Item -ItemType Directory -Path "C:\output"
 			}
 			
@@ -241,11 +240,16 @@ while ($start -eq $true) {
 						
 				}
 				else {
-				
-					$ipAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" } }
-					$macAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetAdapter | select-Object -ExpandProperty MacAddress }
-					$osName = Invoke-Command -ComputerName $computer -ScriptBlock { Get-ComputerInfo | Select-Object -ExpandProperty osname }
-			
+					try {
+						$ipAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" } } -ErrorAction Stop 
+						$macAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetAdapter | select-Object -ExpandProperty MacAddress } -ErrorAction Stop 
+						$osName = Invoke-Command -ComputerName $computer -ScriptBlock { Get-ComputerInfo | Select-Object -ExpandProperty osname } -ErrorAction Stop 
+					}
+					catch {
+					
+						Write-Host -ForegroundColor Red "Something went wrong...is WinRM configured correctly on all machines?"
+						break
+					}
 				}
 			
 				$output = @($computer + ": " + $macAddress + ", " + $ipAddress + ", " + $osName)
@@ -262,16 +266,22 @@ while ($start -eq $true) {
 		? {
 	
 			powershell -file .\Help.ps1
-	
+			break
 		}
 	
+		?? {
+		
+			Write-Host -ForegroundColor Yellow "Local: Can only be run on computer connected to domain."
+			Write-Host -ForegroundColor Yellow "Remote: Can be run on any machine connected to a network (Uses WinRM)"
+			
+		}
 	
 		#exit
 	
 		quit {
 	
 			$start = $false
-	
+			break
 		}
 		
 	
