@@ -236,7 +236,7 @@ while ($start -eq $true) {
 
 			if (!(Test-Path -Path "C:\output")) {
 				New-Item -ItemType Directory -Path "C:\output"
-			}
+			} 
 			
 			$fileName = Read-Host "Enter filename. File will be outputted to C:\output as .txt"
 			$computers = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
