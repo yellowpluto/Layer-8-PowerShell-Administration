@@ -52,7 +52,7 @@ Write-Host -ForegroundColor Red @"
 #>
 
 try {
-$credential = Get-Credential
+$Global:credential = Get-Credential
 }
 catch {
 Write-Host -ForegroundColor Yellow "No initial credential provided. This is fine."
@@ -107,16 +107,16 @@ while ($start -eq $true) {
 			$result = $users[$choose - 1]
 			$if = Read-Host "Change password on next logon? (Y/N)"
 			if ($if -eq "Y") {
-				Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $true
-				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+				Set-ADUser -Credential $Global:credential -Identity $result -ChangePasswordAtLogon $true
+				Set-ADAccountPassword -Credential $Global:credential -Identity $result -Reset
 			}
 			ElseIf ($if -eq "N") {
-				Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $false
-				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+				Set-ADUser -Credential $Global:credential -Identity $result -ChangePasswordAtLogon $false
+				Set-ADAccountPassword -Credential $Global:credential -Identity $result -Reset
 			}
 			Else {
 				Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset"
-				Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+				Set-ADAccountPassword -Credential $Global:credential -Identity $result -Reset
 			}
 			
 		
@@ -171,7 +171,7 @@ while ($start -eq $true) {
 			[string]$day = Read-Host "Enter day(ADD '/' @ END)"
 			[string]$date = $month + $day + $year
 			foreach ($user in $users) {
-				Set-ADAccountExpiration -Credential $credential -Identity $user -DateTime $date
+				Set-ADAccountExpiration -Credential $Global:credential -Identity $user -DateTime $date
 			}
 		
 		
@@ -214,7 +214,7 @@ while ($start -eq $true) {
 			$choose = Read-Host "Choose OU"
 			$result = $listArray[$choose - 1]
 			Write-Host -ForegroundColor Yellow "$result CHOSEN"
-			Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Credential $credential -Identity $_ -EMailAddress "$_@AnimeHealth.net" }
+			Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Credential $Global:credential -Identity $_ -EMailAddress "$_@AnimeHealth.net" }
 		
         
 			break
@@ -293,7 +293,8 @@ while ($start -eq $true) {
 		#exit
 	
 		quit {
-	
+			
+			$Global:credential = 0
 			$start = $false
 			break
 		}
