@@ -160,7 +160,7 @@ while ($start -eq $true) {
 	
 		quit {
 			
-			$Global:credential = 0
+			$Global:credential = $null
 			$start = $false
 			break
 
