@@ -50,12 +50,9 @@ Write-Host -ForegroundColor Red @"
 		-3 and 4 use static names
 
 #>
-try {
-$credential = Get-Credential
-}
-catch {
-Write-Host -ForegroundColor Yellow "No initial credential provided. This is fine."
-}
+
+powershell -file .\Credential.ps1
+..\Credential.ps1
 powershell -file .\Help.ps1
 $start = $true
 while ($start -eq $true) {
