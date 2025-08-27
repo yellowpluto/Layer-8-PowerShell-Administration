@@ -64,48 +64,48 @@ while ($start -eq $true) {
 	switch ($num) {
 		1a {
 		
-			powershell -file ".\Scripts\1a"
+			powershell -file ".\Scripts\1a.ps1"
 			break
 		}
 	
 		2a {
 				
-			powershell -file ".\Scripts\2a"
+			powershell -file ".\Scripts\2a.ps1"
 			break
 
 		}
 	
 		3a {
 	
-			powershell -file ".\Scripts\3a"
+			powershell -file ".\Scripts\3a.ps1"
 			break
 
 		}
 		
 		4a {
 	
-			powershell -file ".\Scripts\4a"
+			powershell -file ".\Scripts\4a.ps1"
 			break
 
 		}
 	
 		5a {
 	
-			powershell -file ".\Scripts\5a"
+			powershell -file ".\Scripts\5a.ps1"
 			break
 
 		}
 	
 		6a {
 			
-			powershell -file ".\Scripts\6a"
+			powershell -file ".\Scripts\6a.ps1"
 			break
 
 		}
 	
 		7a {
 	
-			powershell -file ".\Scripts\7a"
+			powershell -file ".\Scripts\7a.ps1"
 			break
 
 		}
@@ -125,7 +125,7 @@ while ($start -eq $true) {
 		
 		101a {
 			
-			powershell -file ".\Scripts\101a"
+			powershell -file ".\Scripts\101a.ps1"
 			break
 	
 		}
@@ -163,7 +163,7 @@ while ($start -eq $true) {
 			$Global:credential = 0
 			$start = $false
 			break
-			
+
 		}
 		
 	
