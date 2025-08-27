@@ -34,5 +34,3 @@ switch($txtFile) {
 }
 }
 
-cd ..
-..\Credential.ps1
