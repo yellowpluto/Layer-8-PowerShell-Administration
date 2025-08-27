@@ -34,3 +34,9 @@ switch($txtFile) {
 }
 }
 
+if($Global:credential -eq $null){
+    $Global:credential = Get-Credential
+}
+
+#Shuffles order of nouns, verbs, and adjectives
+$orderOfWord = Get-Random -Max 4 -Min 1
