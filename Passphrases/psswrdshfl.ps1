@@ -1,3 +1,5 @@
+$passphrase = ""
+$randomEndNumber = Get-Random -Max 99999 -Min 10000
 $count = 0
 # 3 words per passphrase logic
 while($count -ne 3){
@@ -10,6 +12,7 @@ switch($txtFile) {
        }
        $noun = Get-Random -InputObject (Get-Content .\Nouns.txt)
        $count++
+       $passphrase += $noun + "-"
        Write-Host $noun
     }
 
@@ -19,6 +22,7 @@ switch($txtFile) {
        } 
        $verb = Get-Random -InputObject (Get-Content .\Verbs.txt)
        $count++
+       $passphrase += $verb + "-"
        Write-Host $verb
     }
 
@@ -28,15 +32,14 @@ switch($txtFile) {
         }
         $adjective = Get-Random -InputObject (Get-Content .\Adjectives.txt)
         $count++
+        $passphrase += $adjective + "-"
         Write-Host $adjective
     }
 
 }
 }
 
-if($Global:credential -eq $null){
-    $Global:credential = Get-Credential
-}
 
-#Shuffles order of nouns, verbs, and adjectives
-$orderOfWord = Get-Random -Max 4 -Min 1
+#Builds the final passphrase and sets it
+$passphrase += $randomEndNumber
+Write-Host $passphrase
