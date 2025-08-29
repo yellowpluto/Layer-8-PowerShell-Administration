@@ -48,7 +48,7 @@ Write-Host -ForegroundColor Red @"
 
 	NOTES ABOUT SCRIPT:
 		-3 and 4 use static names
-
+		- Global credential not working as intended (will figure out later)
 #>
 
 try {
