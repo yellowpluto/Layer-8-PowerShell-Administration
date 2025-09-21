@@ -1,7 +1,7 @@
 if (!(Test-Path -Path "C:\output")) {
-		New-Item -ItemType Directory -Path "C:\output"
-		Set-Acl -Path "C:\output" -AclObject $PSScriptRoot\Other\outputacl.txt
-	} 
+	New-Item -ItemType Directory -Path "C:\output"
+	Set-Acl -Path "C:\output" -AclObject $PSScriptRoot\Other\outputacl.txt
+} 
 
 #0a
 function Unblock-Scripts {
@@ -123,11 +123,11 @@ function Reset-LocalADUserPassword {
 	
 	[string]$adUserInput = Read-Host "Enter first initial (filters automatically)"
 	$adUserInput = $adUserInput + "*"
-	$getADUsers = Get-ADUser -Filter {Name -like $adUserInput} | Select-Object -ExpandProperty SamAccountName
+	$getADUsers = Get-ADUser -Filter { Name -like $adUserInput } | Select-Object -ExpandProperty SamAccountName
 	
 	$count = 1
 
-	foreach($ADUser in $getADUsers){
+	foreach ($ADUser in $getADUsers) {
 		Write-Host "[$count]$ADUser"
 		$count++
 	}
@@ -137,7 +137,7 @@ function Reset-LocalADUserPassword {
 	$result = $getADUsers[$choose - 1]
 	$if = Read-Host "Change password on next logon? (Y/N)"
 	if ($if -eq "Y") {
-		if((Get-ADUser -Identity $result -Properties PasswordNeverExpires | Select-Object -ExpandProperty PasswordNeverExpires) -eq $true){
+		if ((Get-ADUser -Identity $result -Properties PasswordNeverExpires | Select-Object -ExpandProperty PasswordNeverExpires) -eq $true) {
 			Set-ADUser -Identity $result -PasswordNeverExpires $false
 		}
 		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $true
@@ -240,16 +240,16 @@ function Set-ADAccountEmails {
 #Figuring out regex
 #Email Address maybe?
 #name logic not working need to fix og method
-function New-ADUsers{
-#temp
-$credential = Get-Credential
+function New-ADUsers {
+	#temp
+	$credential = Get-Credential
 
 
-Write-Host -ForegroundColor Yellow "Looking for users.txt"
-if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
+	Write-Host -ForegroundColor Yellow "Looking for users.txt"
+	if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		Write-Host -ForegroundColor Red "`nPlease insert users.txt"
 		Write-Host -ForegroundColor Yellow "`nScript will start automatically once the file is found within the script root"
-		while(!(Test-Path -Path "$PSScriptRoot\users.txt")){
+		while (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		}
 	}
 	
@@ -265,12 +265,12 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 	$dupChkFI = $dupChkFI[0]
 	$dupChk = ("$dupChkFI" + "$dupChkLN")
 	$dupNum = 1
-	foreach($user in $users){
+	foreach ($user in $users) {
 		
 		$dupFlag = $false
 		$build = $user -Split " "
 		
-		if(!($build.Length -eq 2)){
+		if (!($build.Length -eq 2)) {
 			Write-Host -ForegroundColor Red "Error occured with formatting. Please check your txt file"
 			return
 		}
@@ -280,18 +280,19 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		$fInit = $fName[0]
 		$dupUsr = ("$fInit" + "$lName")
 		
-		if($dupChk -eq $dupUsr){
+		if ($dupChk -eq $dupUsr) {
 			$dupNum++
 			$dupFlag = $true
 		}
 		
-		if($dupFlag -eq $true){
-		New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$dupUsr" + "0$dupNum" + "@$domainName")
-		Write-Host -ForegroundColor Cyan "Great!"
-		}else{
-		New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "01" + "@$domainName")
-		Write-Host -ForegroundColor Cyan "Great!"
-	}
+		if ($dupFlag -eq $true) {
+			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$dupUsr" + "0$dupNum" + "@$domainName")
+			Write-Host -ForegroundColor Cyan "Great!"
+		}
+		else {
+			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "01" + "@$domainName")
+			Write-Host -ForegroundColor Cyan "Great!"
+		}
 	}
 	
 }
