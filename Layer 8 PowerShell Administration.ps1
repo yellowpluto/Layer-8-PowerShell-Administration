@@ -242,35 +242,30 @@ function Set-ADAccountEmails {
 #name logic not working need to fix og method
 function New-ADUsers {
 	#temp
-	$credential = Get-Credential
+$credential = Get-Credential
 
 
-	Write-Host -ForegroundColor Yellow "Looking for users.txt"
-	if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
+Write-Host -ForegroundColor Yellow "Looking for users.txt"
+if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		Write-Host -ForegroundColor Red "`nPlease insert users.txt"
 		Write-Host -ForegroundColor Yellow "`nScript will start automatically once the file is found within the script root"
-		while (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
+		while(!(Test-Path -Path "$PSScriptRoot\users.txt")){
 		}
 	}
 	
-	$secureStr = ConvertTo-SecureString -AsPlainText 'LayerDank420$'
+	$secureStr = ConvertTo-SecureString -AsPlainText 'Password1!'
 	$domainName = Get-ADDomain | Select-Object -ExpandProperty DNSRoot
 	
 	Write-Host -ForegroundColor Cyan "`nFound!"
+	
 	$users = Get-Content users.txt
-	$dupChkS = $users[0]
-	$dupChkS = $dupChkS -split " "
-	$dupChkLN = $dupChkS[1]
-	$dupChkFI = $dupChkS[0]
-	$dupChkFI = $dupChkFI[0]
-	$dupChk = ("$dupChkFI" + "$dupChkLN")
-	$dupNum = 1
-	foreach ($user in $users) {
+	New-Item "temp.txt"
+	
+	foreach($user in $users){
 		
-		$dupFlag = $false
 		$build = $user -Split " "
 		
-		if (!($build.Length -eq 2)) {
+		if(!($build.Length -eq 2)){
 			Write-Host -ForegroundColor Red "Error occured with formatting. Please check your txt file"
 			return
 		}
@@ -278,22 +273,18 @@ function New-ADUsers {
 		$fName = $build[0]
 		$lName = $build[1]
 		$fInit = $fName[0]
-		$dupUsr = ("$fInit" + "$lName")
 		
-		if ($dupChk -eq $dupUsr) {
-			$dupNum++
-			$dupFlag = $true
-		}
+		Add-Content -Path "temp.txt" -Value ("$fInit" + "$lName")
 		
-		if ($dupFlag -eq $true) {
-			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$dupUsr" + "0$dupNum" + "@$domainName")
-			Write-Host -ForegroundColor Cyan "Great!"
-		}
-		else {
-			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "01" + "@$domainName")
-			Write-Host -ForegroundColor Cyan "Great!"
-		}
 	}
+	
+	foreach($name in (Get-Content "temp.txt")){
+		
+	
+	}
+	
+	New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "01" + "@$domainName")
+	Write-Host -ForegroundColor Cyan "Great!"
 	
 }
 
