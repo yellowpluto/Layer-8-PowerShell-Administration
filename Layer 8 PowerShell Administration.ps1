@@ -33,6 +33,11 @@ function Unblock-Scripts {
 		- Create web server with all files needed for comp
 		- Secure the psswrdshfl script
 		- Change file permissions for output folder
+		- Get-EventLog for userlogonmonitor
+		- psexec = SMB
+		- remote shutdown = remote shutdown protocol
+		- auto backup
+		- auto remove user?
 
 #>
 
@@ -115,31 +120,26 @@ function Use-PingInfoView {
 
 #2a
 function Reset-LocalADUserPassword {
-	$listArray = @()
-	$numList = 1
-	$2a = Get-ADOrganizationalUnit -Filter * | Select-Object -ExpandProperty DistinguishedName | Sort-Object -desc
-	foreach ($2 in $2a) {
-		"(" + $numList.ToString() + ")" + $2
-		$numList++
-		$listArray += $2
+	
+	[string]$adUserInput = Read-Host "Enter first initial (filters automatically)"
+	$adUserInput = $adUserInput + "*"
+	$getADUsers = Get-ADUser -Filter {Name -like $adUserInput} | Select-Object -ExpandProperty SamAccountName
+	
+	$count = 1
+
+	foreach($ADUser in $getADUsers){
+		Write-Host "[$count]$ADUser"
+		$count++
 	}
-		
-	Write-Host "Choose an OU"
-	$choose = Read-Host
-	$result = $listArray[$choose - 1]
-	$users = @(Get-ADUser -Filter * -SearchBase $result | Select-Object -ExpandProperty SamAccountName | Sort-Object -desc)
-	$numList = 1
-	foreach ($user in $users) {
-		"(" + $numList.ToString() + ")" + $user
-		$numList++
-		$users += $users
-	}
-		
+
 	Write-Host "Choose a user"
 	$choose = Read-Host
-	$result = $users[$choose - 1]
+	$result = $getADUsers[$choose - 1]
 	$if = Read-Host "Change password on next logon? (Y/N)"
 	if ($if -eq "Y") {
+		if((Get-ADUser -Identity $result -Properties PasswordNeverExpires | Select-Object -ExpandProperty PasswordNeverExpires) -eq $true){
+			Set-ADUser -Identity $result -PasswordNeverExpires $false
+		}
 		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $true
 		Set-ADAccountPassword -Credential $credential -Identity $result -Reset
 	}
@@ -151,6 +151,8 @@ function Reset-LocalADUserPassword {
 		Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset"
 		Set-ADAccountPassword -Credential $credential -Identity $result -Reset
 	}
+	
+
 }
 
 #3a
@@ -300,6 +302,19 @@ function Enable-PSRemotingInDomain {
 	$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
 	Import-GPO -BackupGpoName 'WinRM' -TargetName 'WinRM' -Path "$location\Group Policy\WinRM" -CreateifNeeded
 	New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
+	gpupdate /force
+}
+
+#100ab (rushed)
+function Disable-PSRemotingInDomain {
+	Remove-GPO "WinRM"
+	Get-ADComputer * Filter | Select-Object -ExpandProperty Name | ForEach-Object {
+		Invoke-Command -ComputerName $_ -ScriptBlock {
+			gpupdate /force
+		}
+
+	}
+
 	gpupdate /force
 }
 
@@ -640,6 +655,13 @@ while ($start -eq $true) {
 		
 		}
 
+		100ab {
+			
+			Disable-PSRemotingInDomain
+			break
+
+		}
+
 		100b {
 
 			Install-ChocolateyInDomain
@@ -669,8 +691,8 @@ while ($start -eq $true) {
 
 		104a {
 
-			Start-Process -FilePath "powershell" -ArgumentList $PSScriptRoot\Scripts\userPasswordMonitor.ps1
-			Start-Process -FilePath "powershell" -ArgumentList $PSScriptRoot\Scripts\userLogonMonitor.ps1
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\userPasswordMonitor.ps1
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\userLogonMonitor.ps1
 			break
 
 		}

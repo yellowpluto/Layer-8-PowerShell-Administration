@@ -1,4 +1,6 @@
 # Might combine into one or give options to do either or later
+# If user turns red = Logon
+# Report to team members
 
 $iniCount = (get-aduser -filter * | Measure-Object).Count
 $iniLastLogon = Get-ADUser -Filter * | Select-Object -ExpandProperty SamAccountName | Sort-Object 
@@ -16,7 +18,7 @@ while ($true) {
         $lastLogon = (Get-ADUser -Identity $adUser -Properties lastlogon | Select-Object -ExpandProperty lastlogon)
 		$lastLogon = ([datetime]$lastLogon).ToString()
 		if($iniLastLogon[$index] -ne $lastLogon){
-			Write-Host -ForegroundColor Red $adUser": $lastLogon"
+			Write-Host -ForegroundColor Red $adUser"`a: $lastLogon"
 		}
 			
 		if($iniLastLogon[$index] -eq $lastLogon) {	

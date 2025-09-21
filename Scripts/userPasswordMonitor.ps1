@@ -13,7 +13,7 @@ while ($true) {
 		
         $lastPassR = (Get-ADUser -Identity $adUser -Properties PasswordLastSet | Select-Object -ExpandProperty PasswordLastSet).Second
 		if($inilastPassR[$index] -ne $lastPassR){
-			Write-Host -ForegroundColor Red $adUser": $lastPassR"
+			Write-Host -ForegroundColor Red $adUser"`a: $lastPassR"
 		}
 			
 		if($inilastPassR[$index] -eq $lastPassR) {	
