@@ -238,8 +238,8 @@ function Set-ADAccountEmails {
 
 #8a
 #Figuring out regex
-#Email Address maybe?
-#name logic not working need to fix og method
+#Email address maybe?
+#Figuring out same name logic
 function New-ADUsers {
 	#temp
 $credential = Get-Credential
@@ -259,7 +259,6 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 	Write-Host -ForegroundColor Cyan "`nFound!"
 	
 	$users = Get-Content users.txt
-	New-Item "temp.txt"
 	
 	foreach($user in $users){
 		
@@ -274,17 +273,29 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		$lName = $build[1]
 		$fInit = $fName[0]
 		
-		Add-Content -Path "temp.txt" -Value ("$fInit" + "$lName")
+		$count = 1
+		$flag = $true
 		
+			try {
+				New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
+				Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName" + "0$count")
+				Write-Host -ForegroundColor Cyan "Great!"
+			}catch{
+				while($flag -eq $true) {
+					if(!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false){
+						#while
+					}else{
+					New-ADUser -Name "$fName $lName 0$count" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName")
+					Set-ADUser -Identity "$fName $lName 0$count" -SamAccountName ("$fInit" + "$lName" + "0$count")
+					Write-Host -ForegroundColor Cyan "Great!"
+					}
+					if(!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false) {
+						$flag = $false
+					}
+			
+			}	
+		}
 	}
-	
-	foreach($name in (Get-Content "temp.txt")){
-		
-	
-	}
-	
-	New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "01" + "@$domainName")
-	Write-Host -ForegroundColor Cyan "Great!"
 	
 }
 
