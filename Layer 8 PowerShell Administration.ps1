@@ -239,17 +239,18 @@ function Set-ADAccountEmails {
 #8a
 #Figuring out regex
 #Email address maybe?
-#Figuring out same name logic
+#Figuring out same initial logic
+#Same name logic done
 function New-ADUsers {
-	#temp
-$credential = Get-Credential
 
+	#temp	
+	$credential = Get-Credential
 
-Write-Host -ForegroundColor Yellow "Looking for users.txt"
-if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
+	Write-Host -ForegroundColor Yellow "Looking for users.txt"
+	if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		Write-Host -ForegroundColor Red "`nPlease insert users.txt"
 		Write-Host -ForegroundColor Yellow "`nScript will start automatically once the file is found within the script root"
-		while(!(Test-Path -Path "$PSScriptRoot\users.txt")){
+		while (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		}
 	}
 	
@@ -260,11 +261,11 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 	
 	$users = Get-Content users.txt
 	
-	foreach($user in $users){
+	foreach ($user in $users) {
 		
 		$build = $user -Split " "
 		
-		if(!($build.Length -eq 2)){
+		if (!($build.Length -eq 2)) {
 			Write-Host -ForegroundColor Red "Error occured with formatting. Please check your txt file"
 			return
 		}
@@ -273,27 +274,30 @@ if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
 		$lName = $build[1]
 		$fInit = $fName[0]
 		
+		$sameNameFlag = $true
+		#$sameIniFlag = $true
 		$count = 1
-		$flag = $true
 		
-			try {
-				New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
-				Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName" + "0$count")
-				Write-Host -ForegroundColor Cyan "Great!"
-			}catch{
-				while($flag -eq $true) {
-					if(!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false){
-						#while
-					}else{
-					New-ADUser -Name "$fName $lName 0$count" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName")
+		try {
+			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
+			Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName" + "0$count")
+			Write-Host -ForegroundColor Cyan "Great!"
+		}
+		catch {
+			while ($sameNameFlag -eq $true) {
+				try {
+					$count++
+					New-ADUser -Name "$fName $lName 0$count" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
 					Set-ADUser -Identity "$fName $lName 0$count" -SamAccountName ("$fInit" + "$lName" + "0$count")
 					Write-Host -ForegroundColor Cyan "Great!"
+					if (!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false) {
+						$sameNameFlag = $false
 					}
-					if(!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false) {
-						$flag = $false
-					}
-			
-			}	
+				}
+				catch {
+					continue
+				}
+			}
 		}
 	}
 	
