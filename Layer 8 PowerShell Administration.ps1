@@ -253,21 +253,24 @@ function New-ADUsers {
 				Jim Brown
 				Freddy von Fazbear -> (Incorrect format because it only takes first and last name, returns error message and stops script)
 		4. Run the script
-		5. Users will be created with the following format:
+		
+		WHAT THE SCRIPT DOES:
+		1. Users will be created with the following format:
 			- User Principal Name (UPN):
 				- First initial + Last name + 0 + number (if needed) + @domain.com
 				- Example:
 					jdoe01@domain.com
-		6. Default password for all users will be 'Password1!' and will require a change at next logon
-		7. If a user with the same first initial and last name already exists, a number will be incremented until a unique UPN is found
+		2. Default password for all users will be 'Password1!' and will require a change at next logon
+		3. If a user with the same first initial and last name already exists, a number will be incremented until a unique UPN is found
 			- Example:
 				- If John Doe already exists as jdoe01@domain.com, the next user will be jdoe02@domain.com
-		8. Ensure you have the necessary permissions to create users in Active Directory
-		9. Make sure to run this script in a secure environment as it handles user credentials
-		10. Modify the default password in the script if needed for your security policies
-		11. This script assumes you have the Active Directory module for PowerShell installed and imported
 
-		NOTE: Script will wait indefinitely until users.txt is found in the script root
+		NOTES: 
+		1. Script will wait indefinitely until users.txt is found in the script root
+		2. Ensure you have the necessary permissions to create users in Active Directory
+		3. Make sure to run this script in a secure environment as it handles user credentials
+		4. Modify the default password in the script if needed for your security policies
+		5. This script assumes you have the Active Directory module for PowerShell installed and imported
 
 		KNOWN ISSUES: If someone with the first initial and last name but not the same full name exists, the script will still increment the number
 			- Example:
