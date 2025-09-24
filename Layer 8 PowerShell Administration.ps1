@@ -345,10 +345,11 @@ function Enable-PSRemotingInDomain {
 
 #100ab (rushed)
 function Disable-PSRemotingInDomain {
+	$count = 1
 	Remove-GPO "WinRM"
 	Get-ADComputer * Filter | Select-Object -ExpandProperty Name | ForEach-Object {
-		Invoke-Command -ScriptBlock { gpupdate /force } -ComputerName $_ -AsJob
-
+		Invoke-Command -ScriptBlock { gpupdate /force } -ComputerName $_ -JobName "GPU$count" -AsJob
+		$count++
 	}
 
 	gpupdate /force
