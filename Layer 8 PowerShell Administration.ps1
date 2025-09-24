@@ -266,6 +266,13 @@ function New-ADUsers {
 		9. Make sure to run this script in a secure environment as it handles user credentials
 		10. Modify the default password in the script if needed for your security policies
 		11. This script assumes you have the Active Directory module for PowerShell installed and imported
+
+		NOTE: Script will wait indefinitely until users.txt is found in the script root
+
+		KNOWN ISSUES: If someone with the first initial and last name but not the same full name exists, the script will still increment the number
+			- Example:
+				- If John Doe exists, and you try to create Jane Doe, it will create Jane Doe with a number appended (e.g., "Jane Doe 02")
+			- How to remediate: Manually change the full name of the user in ADUC or PowerShell
 	#>
 
 	Write-Host -ForegroundColor Yellow "Looking for users.txt"
