@@ -239,6 +239,9 @@ function Set-ADAccountEmails {
 #8a
 function New-ADUsers {
 
+	#Delete the comment block below if you want to use this script outside the main script
+	#$credential = Get-Credential -Message "Enter Domain Admin credentials"
+	
 	<#
 		HOW TO USE SCRIPT:
 		1. Create a text file named users.txt
