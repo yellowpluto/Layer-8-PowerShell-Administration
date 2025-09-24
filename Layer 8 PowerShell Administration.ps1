@@ -239,7 +239,7 @@ function Set-ADAccountEmails {
 #8a
 function New-ADUsers {
 
-	#Delete the comment block below if you want to use this script outside the main script
+	#Delete the comment block below if you want to use this script outside the main script / I'm sending this standalone script to you
 	#$credential = Get-Credential -Message "Enter Domain Admin credentials"
 	
 	<#
