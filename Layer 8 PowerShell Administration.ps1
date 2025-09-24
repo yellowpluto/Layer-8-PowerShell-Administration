@@ -237,14 +237,33 @@ function Set-ADAccountEmails {
 }
 
 #8a
-#Figuring out regex
-#Email address maybe?
-#Figuring out same initial logic
-#Same name logic done
 function New-ADUsers {
 
-	#temp	
-	$credential = Get-Credential
+	<#
+		HOW TO USE SCRIPT:
+		1. Create a text file named users.txt
+		2. Place users.txt in the same directory as this script
+		3. Each line of the text file should contain a first and last name separated by a space
+			- Example:
+				John Doe
+				Jane Smith
+				Jim Brown
+				Freddy von Fazbear -> (Incorrect format because it only takes first and last name, returns error message and stops script)
+		4. Run the script
+		5. Users will be created with the following format:
+			- User Principal Name (UPN):
+				- First initial + Last name + 0 + number (if needed) + @domain.com
+				- Example:
+					jdoe01@domain.com
+		6. Default password for all users will be 'Password1!' and will require a change at next logon
+		7. If a user with the same first initial and last name already exists, a number will be incremented until a unique UPN is found
+			- Example:
+				- If John Doe already exists as jdoe01@domain.com, the next user will be jdoe02@domain.com
+		8. Ensure you have the necessary permissions to create users in Active Directory
+		9. Make sure to run this script in a secure environment as it handles user credentials
+		10. Modify the default password in the script if needed for your security policies
+		11. This script assumes you have the Active Directory module for PowerShell installed and imported
+	#>
 
 	Write-Host -ForegroundColor Yellow "Looking for users.txt"
 	if (!(Test-Path -Path "$PSScriptRoot\users.txt")) {
@@ -275,11 +294,10 @@ function New-ADUsers {
 		$fInit = $fName[0]
 		
 		$sameNameFlag = $true
-		#$sameIniFlag = $true
 		$count = 1
 		
 		try {
-			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
+			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -EmailAddress ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
 			Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName" + "0$count")
 			Write-Host -ForegroundColor Cyan "Great!"
 		}
@@ -287,7 +305,7 @@ function New-ADUsers {
 			while ($sameNameFlag -eq $true) {
 				try {
 					$count++
-					New-ADUser -Name "$fName $lName 0$count" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
+					New-ADUser -Name "$fName $lName 0$count" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -EmailAddress ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
 					Set-ADUser -Identity "$fName $lName 0$count" -SamAccountName ("$fInit" + "$lName" + "0$count")
 					Write-Host -ForegroundColor Cyan "Great!"
 					if (!(Get-ADUser -Identity ("$fInit" + "$lName" + "0$count")) -eq $false) {
