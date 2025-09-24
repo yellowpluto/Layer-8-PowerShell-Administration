@@ -347,9 +347,7 @@ function Enable-PSRemotingInDomain {
 function Disable-PSRemotingInDomain {
 	Remove-GPO "WinRM"
 	Get-ADComputer * Filter | Select-Object -ExpandProperty Name | ForEach-Object {
-		Invoke-Command -ComputerName $_ -ScriptBlock {
-			gpupdate /force
-		}
+		Invoke-Command -ScriptBlock { gpupdate /force } -ComputerName $_ -AsJob
 
 	}
 
