@@ -101,20 +101,11 @@ function Ping-LocalADMachines {
 }
 
 #PingInfoView may not be allowed during comp...will get to later
-#1b UNFINISHED SCRIPT
+#1b UNFINISHED SCRIPT (Assumes you use Wi-Fi)
 function Use-PingInfoView {
-	$writing = $true
-	$hostsList = @()
-	while ($writing -eq $true) {
-
-		$read = Read-Host "Enter one host at a time"
-		$hostsList += "$read`r`n"
-		if ($read -eq "") {
-			$writing = $false
-	
-		}
-
-	}
+	$cidrN = Get-NetIPAddress -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress
+	$cidrN = $cidrN -split "\."
+	$cidrN | Where-Object {$_ -notlike $cidrN[3]}
 
 }
 
