@@ -131,18 +131,19 @@ function Reset-LocalADUserPassword {
 	$if = Read-Host "Change password on next logon? (Y/N)"
 	if ($if -eq "Y") {
 		if ((Get-ADUser -Identity $result -Properties PasswordNeverExpires | Select-Object -ExpandProperty PasswordNeverExpires) -eq $true) {
-			Set-ADUser -Identity $result -PasswordNeverExpires $false
+			Set-ADUser -Identity $result -PasswordNeverExpires 0
 		}
-		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $true
 		Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon 1
 	}
 	ElseIf ($if -eq "N") {
-		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon $false
 		Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon 0
 	}
 	Else {
-		Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset"
+		Write-Host -ForegroundColor Red "Incorrect value proceeding to password reset (User will change password on logon)"
 		Set-ADAccountPassword -Credential $credential -Identity $result -Reset
+		Set-ADUser -Credential $credential -Identity $result -ChangePasswordAtLogon 1
 	}
 	
 
