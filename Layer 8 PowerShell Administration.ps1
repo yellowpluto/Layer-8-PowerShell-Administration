@@ -1,6 +1,8 @@
 if (!(Test-Path -Path "C:\output")) {
 	New-Item -ItemType Directory -Path "C:\output"
-	Set-Acl -Path "C:\output" -AclObject $PSScriptRoot\Other\outputacl.txt
+    $getacl = (Get-Acl -path "$PSScriptRoot\Other\outputacl.txt")
+    $getacl.SetAccessRuleProtection($true,$true)  
+    Set-Acl -Path "C:\output" -AclObject $getacl
 } 
 
 #0a
