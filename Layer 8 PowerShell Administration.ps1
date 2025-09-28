@@ -40,6 +40,9 @@ function Unblock-Scripts {
 		- remote shutdown = remote shutdown protocol
 		- auto backup
 		- auto remove user?
+		- login attempt monitor (with windows event id)
+		- msiexec
+		- add groups automatically
 
 #>
 
@@ -356,7 +359,7 @@ function Install-ChocolateyInDomain {
 	}
 }
 
-#101a
+#101a (Need to rebuild)
 function Get-InventoryDomainLocal {
 		
 	if (!(Test-Path -Path "C:\output")) {

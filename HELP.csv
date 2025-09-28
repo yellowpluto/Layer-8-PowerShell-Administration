@@ -11,7 +11,7 @@ Local,Remote,Other
 100(NT) - Ping info view domain
 100a(CCDC) - Enable PS Remoting on all machines across domain via GP (WinRM),100b(CCDC)(UF) - Install chocolatey
 100ab(CCDC) - Diable PS Remoting on all machines across domain
-101a(CCDC) - Get inventory for all machines across domain
+101a(CCDC)(UF) - Get inventory for all machines across domain
 102a(CCDC) - Shuffle AD creds
 103a(CCDC) - Turn SMBv1 Off
 104a(CCDC) - User monitors
