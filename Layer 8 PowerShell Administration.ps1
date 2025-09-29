@@ -766,13 +766,9 @@ while ($start -eq $true) {
 		#Function currently working on: 8a
 		999 {
 	
-			$credential = Get-Credential
-			$user = "TTest" 
-			$count = 1
-			while ($count -le 10) {
-				New-ADUser -Name ("$user" + "0$count") -SamAccountName ("$user" + "0$count") -PasswordNotRequired $true -Credential $credential -Passthru
-				$count++
-			}
+			$cidrN = Get-NetIPAddress -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress
+			$cidrN = $cidrN -split "\."
+			$cidrN | Where-Object {$_ -notlike $cidrN[3]}
 			
 		}
 	
