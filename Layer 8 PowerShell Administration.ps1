@@ -105,7 +105,7 @@ function Ping-LocalADMachines {
 	Test-NetConnection $result
 }
 
-#1b UNFINISHED SCRIPT
+#1b (Need to add other CIDR logic)
 function Use-PingInfoView {
 	
 	[string]$subnetBinary = @()
@@ -141,6 +141,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -187,12 +189,15 @@ function Use-PingInfoView {
 			
 			$cidrIP = $cidrIP.Split('.') 
 			$cidrIP[3] = 0
-			$cidrIP[2] = 0
 			$cidrIP = $cidrIP -join '.'
-			$cidrIP = "$cidrIP/16"
+			$cidrIP = "$cidrIP/24"
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
-
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
 			break
 
@@ -237,13 +242,15 @@ function Use-PingInfoView {
 			
 			$cidrIP = $cidrIP.Split('.') 
 			$cidrIP[3] = 0
-			$cidrIP[2] = 0
-			$cidrIP[1] = 0
 			$cidrIP = $cidrIP -join '.'
-			$cidrIP = "$cidrIP/8"
+			$cidrIP = "$cidrIP/24"
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
-
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
 			break
 
@@ -701,7 +708,7 @@ while ($start -eq $true) {
 		
 			Ping-LocalADMachines
 			break
-			
+
 		}
 
 		1b {
