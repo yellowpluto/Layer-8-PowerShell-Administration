@@ -111,9 +111,11 @@ function Use-PingInfoView {
 	[string]$subnetBinary = @()
 	$count = 1
     $netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
+	$netAdapIP = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPAddress
     Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
     $cnetAdapConf = Read-Host "Choose a number"
     $netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
+	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object {($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*")}
 	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
 		[int]$_
 		$num = $_
@@ -126,8 +128,128 @@ function Use-PingInfoView {
 		}
 	}
     
-	$CIDR = $subnetBinary.Length
-	New-Item -Path C:\output -Name CIDR.txt
+	$cidr = $subnetBinary.Length
+	$cidrIP = $netAdapIP
+	
+	switch ($cidr) {
+		24 {
+	
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/24"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
+
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
+
+		}
+		
+		23 {
+			
+
+		}
+		
+		22 {
+			
+
+		}
+		
+		21 {
+			
+
+		}
+		
+		20 {
+			
+
+		}
+		
+		19 {
+			
+
+		}
+		
+		18 {
+			
+
+		}
+		
+		17 {
+			
+
+		}
+		
+		16 {
+			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/16"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
+
+
+
+			break
+
+		}
+		
+		15 {
+			
+
+		}
+		
+		14 {
+			
+
+		}
+		
+		13 {
+			
+
+		}
+		
+		12 {
+			
+
+		}
+		
+		11 {
+			
+
+		}
+		
+		10 {
+			
+
+		}
+		
+		9 {
+			
+
+		}
+		
+		8 {
+			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = 0
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/8"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
+
+
+
+			break
+
+		}
+
+	}
 
 	#Add switch statement that determines format of IP address + CIDR into 
 
@@ -579,7 +701,16 @@ while ($start -eq $true) {
 		
 			Ping-LocalADMachines
 			break
+			
 		}
+
+		1b {
+
+			Use-PingInfoView
+			break
+
+		}
+
 	
 		2a {
 				
