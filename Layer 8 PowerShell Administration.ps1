@@ -108,9 +108,12 @@ function Ping-LocalADMachines {
 #PingInfoView may not be allowed during comp...will get to later
 #1b UNFINISHED SCRIPT (Assumes you use Wi-Fi)
 function Use-PingInfoView {
-	$cidrN = Get-NetIPAddress -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress
-	$cidrN = $cidrN -split "\."
-	$cidrN | Where-Object {$_ -notlike $cidrN[3]}
+	$count = 1
+	$netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description
+	Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
+	$cnetAdapConf = Read-Host "Choose a number"
+	$netAdapConf = $netAdapConf[$cnetAdapConf - 1]
+	$netAdapConf
 
 }
 
