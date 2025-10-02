@@ -105,15 +105,31 @@ function Ping-LocalADMachines {
 	Test-NetConnection $result
 }
 
-#PingInfoView may not be allowed during comp...will get to later
-#1b UNFINISHED SCRIPT (Assumes you use Wi-Fi)
+#1b UNFINISHED SCRIPT
 function Use-PingInfoView {
+	
+	[string]$subnetBinary = @()
 	$count = 1
-	$netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description
-	Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
-	$cnetAdapConf = Read-Host "Choose a number"
-	$netAdapConf = $netAdapConf[$cnetAdapConf - 1]
-	$netAdapConf
+    $netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
+    Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
+    $cnetAdapConf = Read-Host "Choose a number"
+    $netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
+	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
+		[int]$_
+		$num = $_
+		if($_ -lt 1){
+		}else{
+			while($num -gt 1){
+				$num = $num/2
+				$subnetBinary += "1"
+			}
+		}
+	}
+    
+	$CIDR = $subnetBinary.Length
+	New-Item -Path C:\output -Name CIDR.txt
+
+	#Add switch statement that determines format of IP address + CIDR into 
 
 }
 
