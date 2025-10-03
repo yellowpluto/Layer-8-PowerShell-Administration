@@ -108,6 +108,7 @@ function Ping-LocalADMachines {
 #1b (Need to add other CIDR logic)
 function Use-PingInfoView {
 	
+	Write-Host -ForegroundColor Yellow "If no IP address is returned you may have APIPA"
 	[string]$subnetBinary = @()
 	$count = 1
     $netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
