@@ -34,7 +34,6 @@ function Unblock-Scripts {
 		- Import-File, Import-Module
 		- Create web server with all files needed for comp
 		- Secure the psswrdshfl script
-		- Change file permissions for output folder
 		- Get-EventLog for userlogonmonitor
 		- psexec = SMB
 		- remote shutdown = remote shutdown protocol
@@ -582,7 +581,7 @@ function Set-ADAccountEmails {
 	$choose = Read-Host "Choose OU"
 	$result = $listArray[$choose - 1]
 	Write-Host -ForegroundColor Yellow "$result CHOSEN"
-	Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Credential $credential -Identity $_ -EMailAddress "$_@AnimeHealth.net" }
+	Get-ADUser -Filter * -SearchBase "$result" | Select-Object -ExpandProperty SamAccountName | ForEach-Object { Set-ADUser -Credential $credential -Identity $_ -EMailAddress "$_@CSUNLayer8.com" }
 }
 
 #8a
