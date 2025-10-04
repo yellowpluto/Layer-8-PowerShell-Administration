@@ -113,10 +113,12 @@ function Use-PingInfoView {
 	$count = 1
     $netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
 	$netAdapIP = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPAddress
+	$netAdapDG = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object DefaultIPGateway 
     Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
     $cnetAdapConf = Read-Host "Choose a number"
     $netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
 	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object {($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*")}
+	$netAdapDG = ($netAdapDG[$cnetAdapConf - 1]).DefaultIPGateway | Where-Object {($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*")}
 	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
 		[int]$_
 		$num = $_
@@ -131,10 +133,11 @@ function Use-PingInfoView {
     
 	$cidr = $subnetBinary.Length
 	$cidrIP = $netAdapIP
-	
+	$cidrDG = $netAdapDG
+
 	switch ($cidr) {
 		24 {
-	
+			
 			$cidrIP = $cidrIP.Split('.') 
 			$cidrIP[3] = 0
 			$cidrIP = $cidrIP -join '.'
@@ -153,36 +156,131 @@ function Use-PingInfoView {
 		
 		23 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/23"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		22 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/22"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		21 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/21"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		20 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/20"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		19 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/19"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		18 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/18"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		17 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/17"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
@@ -190,8 +288,9 @@ function Use-PingInfoView {
 			
 			$cidrIP = $cidrIP.Split('.') 
 			$cidrIP[3] = 0
+			$cidrIP[2] = 0
 			$cidrIP = $cidrIP -join '.'
-			$cidrIP = "$cidrIP/24"
+			$cidrIP = "$cidrIP/16"
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -206,36 +305,138 @@ function Use-PingInfoView {
 		
 		15 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/15"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		14 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/14"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		13 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/13"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
 
+			break
 		}
 		
 		12 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/12"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		11 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/11"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		10 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/10"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
 		9 {
 			
+			$cidrIP = $cidrIP.Split('.') 
+			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = $cidrDG
+			$cidrIP = $cidrIP -join '.'
+			$cidrIP = "$cidrIP/9"
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
+			
+			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
+			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
+			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
+			Set-Location $PSScriptRoot
+
+			break
 
 		}
 		
@@ -243,8 +444,10 @@ function Use-PingInfoView {
 			
 			$cidrIP = $cidrIP.Split('.') 
 			$cidrIP[3] = 0
+			$cidrIP[2] = 0
+			$cidrIP[1] = 0
 			$cidrIP = $cidrIP -join '.'
-			$cidrIP = "$cidrIP/24"
+			$cidrIP = "$cidrIP/8"
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
