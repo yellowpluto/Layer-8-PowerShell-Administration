@@ -33,7 +33,6 @@ function Unblock-Scripts {
 	Brian Notes:
 		- Import-File, Import-Module
 		- Create web server with all files needed for comp
-		- Secure the psswrdshfl script
 		- Get-EventLog for userlogonmonitor
 		- psexec = SMB
 		- remote shutdown = remote shutdown protocol
@@ -141,6 +140,8 @@ function Use-PingInfoView {
 			$cidrIP[3] = 0
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/24"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -160,6 +161,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/23"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -179,6 +182,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/22"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -198,6 +203,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/21"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -216,6 +223,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/20"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -235,6 +244,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/19"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -253,6 +264,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/18"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -271,6 +284,8 @@ function Use-PingInfoView {
 			$cidrIP[2] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/17"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -290,7 +305,9 @@ function Use-PingInfoView {
 			$cidrIP[2] = 0
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/16"
-			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
+			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
 			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
@@ -310,6 +327,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/15"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -329,6 +348,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/14"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -348,6 +369,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/13"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -367,6 +390,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/12"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -387,6 +412,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/11"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -407,6 +434,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/10"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -427,6 +456,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = $cidrDG
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/9"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -447,6 +478,8 @@ function Use-PingInfoView {
 			$cidrIP[1] = 0
 			$cidrIP = $cidrIP -join '.'
 			$cidrIP = "$cidrIP/8"
+			$global:CIDRN = $cidrIP
+			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\nmap.ps1
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
@@ -749,9 +782,20 @@ function Get-InventoryDomainLocal {
 			
 }
 
-#102a Is the verb 'Shuffle' ok?
+#102a
 function Set-RandomADPasswords {
 	#add random characters
+
+	do {
+		$key = Read-Host "Insert key (will append to final passphrase)"
+		if($key -le 7){
+			Write-Host -ForegroundColor Red "Key isn't long enough"
+		}
+	}
+	until($key.Length -gt 7)
+
+	
+	
 	if (!(Test-Path -Path "C:\output")) {
 		New-Item -ItemType Directory -Path "C:\output"
 	} 
@@ -809,6 +853,7 @@ function Set-RandomADPasswords {
 	
 		#Builds the final passphrase and sets it
 		$passphrase += $randomEndNumber
+		$passphrase += $key
 		$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
 		Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
 		$output = @("$User" + ": " + "$passphrase")
