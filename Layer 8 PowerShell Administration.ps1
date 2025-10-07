@@ -787,10 +787,7 @@ function Set-RandomADPasswords {
 	#add random characters
 
 	do {
-		$key = Read-Host "Insert key (will append to final passphrase)"
-		if($key -le 7){
-			Write-Host -ForegroundColor Red "Key isn't long enough"
-		}
+		$key = Read-Host "Insert key (will append to final passphrase) WILL PROMPT AGAIN IF NOT 8 CHARACTERS OR GREATER"
 	}
 	until($key.Length -gt 7)
 
