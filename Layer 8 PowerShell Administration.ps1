@@ -718,7 +718,11 @@ function New-ADUsers {
 
 #100
 function New-PSSessions {
-	New-Item "$PSScriptRoot\PSSessions.txt"
+	New-Item "$PSScriptRoot\PSSessions.txt" -ErrorAction SilentlyContinue
+	
+	if (Test-Path -Path "$PSScriptRoot\PSSessions.txt") {
+		Clear-Content -Path "$PSScriptRoot\PSSessions.txt"
+	}
 	
 	Write-Host -ForegroundColor Yellow "Looking for 'input.txt' in script root folder"
 	while (!(Test-Path -Path "$PSScriptRoot\input.csv")) {
@@ -756,11 +760,10 @@ function Disable-PSRemotingInDomain {
 	gpupdate /force
 }
 
-#100b UNFINISHED SCRIPT
+#100b
 function Install-ChocolateyInDomain {
-	Invoke-Command {
-		Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-	}
+	$newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+	Invoke-Command -ScriptBlock { Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) } -ComputerName $newPSSessions
 }
 
 #101a
@@ -912,6 +915,26 @@ function Stop-SMBv1 {
 		Write-Host "Failure"
 	}
 
+}
+
+#103b
+function Stop-SMBv1Remote {
+	$newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+	Invoke-Command -ScriptBlock {
+		#Turns SMB1 off
+		Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
+
+		#Checks if SMB1 if off
+		$test = (Get-SmbServerConfiguration).EnableSMB1Protocol 
+
+		if ($test -eq $false) {
+			Write-Host "Success"
+		}
+		else {
+			Write-Host "Failure"
+		}
+	} -ComputerName $newPSSessions
+	
 }
 
 <#
