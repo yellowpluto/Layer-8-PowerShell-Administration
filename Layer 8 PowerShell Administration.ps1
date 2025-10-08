@@ -1,8 +1,8 @@
 if (!(Test-Path -Path "C:\output")) {
 	New-Item -ItemType Directory -Path "C:\output"
-    $getacl = (Get-Acl -path "$PSScriptRoot\Other\outputacl.txt")
-    $getacl.SetAccessRuleProtection($true,$true)  
-    Set-Acl -Path "C:\output" -AclObject $getacl
+	$getacl = (Get-Acl -path "$PSScriptRoot\Other\outputacl.txt")
+	$getacl.SetAccessRuleProtection($true, $true)  
+	Set-Acl -Path "C:\output" -AclObject $getacl
 } 
 
 #0a
@@ -109,21 +109,22 @@ function Use-PingInfoView {
 	Write-Host -ForegroundColor Yellow "If no IP address is returned you may have APIPA"
 	[string]$subnetBinary = @()
 	$count = 1
-    $netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
+	$netAdapConf = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPSubnet
 	$netAdapIP = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-object IPAddress
 	$netAdapDG = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object DefaultIPGateway 
-    Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object {Write-Output "[$count]$_"; $count++}
-    $cnetAdapConf = Read-Host "Choose a number"
-    $netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
-	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object {($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*")}
-	$netAdapDG = ($netAdapDG[$cnetAdapConf - 1]).DefaultIPGateway | Where-Object {($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*")}
+	Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object { Write-Output "[$count]$_"; $count++ }
+	$cnetAdapConf = Read-Host "Choose a number"
+	$netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
+	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
+	$netAdapDG = ($netAdapDG[$cnetAdapConf - 1]).DefaultIPGateway | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
 	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
 		[int]$_
 		$num = $_
-		if($_ -lt 1){
-		}else{
-			while($num -gt 1){
-				$num = $num/2
+		if ($_ -lt 1) {
+		}
+		else {
+			while ($num -gt 1) {
+				$num = $num / 2
 				$subnetBinary += "1"
 			}
 		}
@@ -145,8 +146,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -166,8 +167,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -187,8 +188,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -208,8 +209,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -228,8 +229,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -249,8 +250,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -269,8 +270,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -289,8 +290,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -310,8 +311,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -332,8 +333,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -353,8 +354,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -374,8 +375,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -395,8 +396,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -417,8 +418,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -439,8 +440,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -461,8 +462,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt"
 			
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -483,8 +484,8 @@ function Use-PingInfoView {
 			$cidrIP | Out-File -FilePath "C:\output\tempCIDR.txt" 
 
 			Set-Location $PSScriptRoot\Private\bin\PingInfoView\
-			.\PingInfoView.exe /stext "C:\output\tempPingList.txt"
-			Invoke-Item "C:\output\tempPingList.txt"
+			.\PingInfoView.exe /scomma "C:\output\tempPingList.csv"
+			Invoke-Item "C:\output"
 			.\PingInfoView.exe /loadfile "C:\output\tempCIDR.txt" /PingEverySeconds 5 /StartPingImmediately 1
 			Set-Location $PSScriptRoot
 
@@ -715,6 +716,25 @@ function New-ADUsers {
 	
 }
 
+#100
+function New-PSSessions {
+	New-Item "$PSScriptRoot\PSSessions.txt"
+	
+	Write-Host -ForegroundColor Yellow "Looking for 'input.txt' in script root folder"
+	while (!(Test-Path -Path "$PSScriptRoot\input.csv")) {
+	}
+	
+	Write-Host -ForegroundColor Cyan "Found!"
+	
+	$split = Import-CSV "$PSScriptRoot\input.csv" | Select-Object -ExpandProperty "Host Name"
+	
+	foreach ($hostname in $split) {
+		$hostname = $hostname -split "\."
+		$hostname = $hostname[0]
+		$hostname | Out-File -FilePath "$PSScriptRoot\PSSessions.txt" -Append
+	}
+}
+
 #100a
 function Enable-PSRemotingInDomain {
 	$location = (Get-Location).Path
@@ -743,43 +763,53 @@ function Install-ChocolateyInDomain {
 	}
 }
 
-#101a (Need to rebuild)
+#101a
 function Get-InventoryDomainLocal {
 		
-	if (!(Test-Path -Path "C:\output")) {
-		New-Item -ItemType Directory -Path "C:\output"
-	} 
-			
-	$fileName = Read-Host "Enter filename. File will be outputted to C:\output as .txt"
-	$computers = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
-	$output = @()
+	Write-Host -ForegroundColor Yellow "Script runs in background."
+	
+	Start-Job -Name "Get-InventoryDomainLocal" -ScriptBlock {
+	
+		$t = get-date -format yyyymmdd_HHmm
+		$fileName = "invFile"
 		
-	foreach ($computer in $computers) {
-		if ($computer -eq (Get-ComputerInfo | select-Object -ExpandProperty CsName)) {
+		if ((Test-Path -Path "C:\output\invFile.txt") -eq ($true)) {
+			Clear-Content -Path "C:\output\invFile.txt"
+		}
+			
+		$computers = Get-ADComputer -Filter * | Select-Object -ExpandProperty Name
+		
+		foreach ($computer in $computers) {
+			if ($computer -eq (Get-ComputerInfo | select-Object -ExpandProperty CsName)) {
 				
-			$ipAddress = Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" }
-			$macAddress = Get-NetAdapter | select-Object -ExpandProperty MacAddress
-			$osName = Get-ComputerInfo | Select-Object -ExpandProperty osname
+				$ipAddress = Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" }
+				$macAddress = Get-NetAdapter | select-Object -ExpandProperty MacAddress
+				$osName = Get-ComputerInfo | Select-Object -ExpandProperty osname
 						
-		}
-		else {
-			try {
-				$ipAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" } } -ErrorAction Stop 
-				$macAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetAdapter | select-Object -ExpandProperty MacAddress } -ErrorAction Stop 
-				$osName = Invoke-Command -ComputerName $computer -ScriptBlock { Get-ComputerInfo | Select-Object -ExpandProperty osname } -ErrorAction Stop 
 			}
-			catch {
-					
-				Write-Host -ForegroundColor Red "Something went wrong...is WinRM configured correctly on all machines?"
-				break
+			else {
+				try {
+					$ipAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetIPAddress | Select-Object -ExpandProperty IPv4Address | Where-Object { $_ -notlike "127.*" } } -ErrorAction Stop 
+					$macAddress = Invoke-Command -ComputerName $computer -ScriptBlock { Get-NetAdapter | select-Object -ExpandProperty MacAddress } -ErrorAction Stop 
+					$osName = Invoke-Command -ComputerName $computer -ScriptBlock { Get-ComputerInfo | Select-Object -ExpandProperty osname } -ErrorAction Stop 
+				}
+				catch {
+					Write-Host -ForegroundColor Red "Something went wrong...is WinRM configured correctly on all machines/are the machines online?"	
+					continue				
+				}
 			}
+			
+			$output = @($computer + ": " + $macAddress + ", " + $ipAddress + ", " + $osName)
+			$dynamicFile += $output
+			# Writing current user's PW to the PW file and loop to get the next user.
+			$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
 		}
-			
-		$output = @($computer + ": " + $macAddress + ", " + $ipAddress + ", " + $osName)
-		$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
-	}
-		
-			
+
+		# Writing out the dynamic file	
+		$fileName = "invFile_$t"
+		$dynamicFile | Out-File -FilePath "C:\output\$fileName.txt"
+		Invoke-Item -Path "C:\output\"
+	}	
 }
 
 #102a
@@ -1084,6 +1114,13 @@ while ($start -eq $true) {
 		
 		#>
 		
+		100 {
+
+			New-PSSessions
+			break
+
+		}
+		
 		100a {
 		
 			Enable-PSRemotingInDomain
@@ -1170,7 +1207,7 @@ while ($start -eq $true) {
 	
 			$cidrN = Get-NetIPAddress -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress
 			$cidrN = $cidrN -split "\."
-			$cidrN | Where-Object {$_ -notlike $cidrN[3]}
+			$cidrN | Where-Object { $_ -notlike $cidrN[3] }
 			
 		}
 	
