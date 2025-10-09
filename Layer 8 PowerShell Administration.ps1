@@ -1185,6 +1185,13 @@ while ($start -eq $true) {
 
 		}
 
+		103b {
+
+			Stop-SMBv1Remote
+			break
+
+		}
+
 		104a {
 
 			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\userPasswordMonitor.ps1
