@@ -740,14 +740,14 @@ function New-PSSessions {
 #100a
 function Enable-PSRemotingInDomain {
 	Start-Job -ScriptBlock {
-    $location = (Get-Location).Path
-	$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
-	Import-GPO -BackupGpoName 'WinRM' -TargetName 'WinRM' -Path "$location\Group Policy\WinRM" -CreateifNeeded
-	New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
-	Import-GPO -BackupGpoName 'RDP' -TargetName 'RDP' -Path "$location\Group Policy\RDP" -CreateifNeeded
-	New-GPLink -Name "RDP" -Target "$distN" -LinkEnabled Yes
-	gpupdate /force
-} -Name "PSRemotingInDomain"
+		$location = (Get-Location).Path
+		$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
+		Import-GPO -BackupGpoName 'WinRM' -TargetName 'WinRM' -Path "$location\Group Policy\WinRM" -CreateifNeeded
+		New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
+		Import-GPO -BackupGpoName 'RDP' -TargetName 'RDP' -Path "$location\Group Policy\RDP" -CreateifNeeded
+		New-GPLink -Name "RDP" -Target "$distN" -LinkEnabled Yes
+		gpupdate /force
+	} -Name "PSRemotingInDomain"
 
 }
 
@@ -766,7 +766,7 @@ function Disable-PSRemotingInDomain {
 
 #100b
 function Install-ChocolateyInDomain {
-    $newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+	$newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
 	Invoke-Command -ScriptBlock { Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) } -ComputerName $newPSSessions
 }
 
@@ -994,10 +994,30 @@ function Stop-SMBv1Remote {
 	
 }
 
+#105a
+function Install-Sysmon {
+	#ADD PSSESIONS
+	$SysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
+	$CUrl = "https://github.com/SwiftOnSecurity/sysmon-config/archive/refs/heads/master.zip"
+	$DownloadPath = "$env:TEMP\Sysmon.zip"
+	$ExtractPath = "$env:TEMP\Sysmon"
+	$CDownloadPath = "$env:TEMP\sysmon-config-master.zip"
+	$CExtractPath = "$env:TEMP\sysmon-config-master"
+
+	Invoke-WebRequest -Uri $SysmonUrl -OutFile $DownloadPath
+	Expand-Archive -Path $DownloadPath -DestinationPath $ExtractPath -Force
+	Invoke-WebRequest -Uri $CUrl -OutFile $CDownloadPath
+	Expand-Archive -Path $CDownloadPath -DestinationPath $CExtractPath -force
+
+     
+	& "$ExtractPath\Sysmon64.exe" -i "$CExtractPath\sysmon-config-master\sysmonconfig-export.xml"
+
+}
+
 #111 
 function Receive-Jobs {
 
-    Receive-Job -Name *
+	Receive-Job -Name *
 
 }
 
@@ -1295,12 +1315,19 @@ while ($start -eq $true) {
 
 		}
 
-        111 {
+		105a {
+
+			Install-Sysmon
+			break
+
+		}
+
+		111 {
         
-            Receive-Jobs
-            break
+			Receive-Jobs
+			break
         
-        }
+		}
 
 		150a {
 

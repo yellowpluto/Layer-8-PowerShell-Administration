@@ -15,6 +15,7 @@ Local,Remote,Other
 102a(CCDC) - Shuffle AD creds
 103a(CCDC) - Turn SMBv1 Off,103b(CCDC) Turn SMBv1 Off Remotely
 104a(CCDC) - User monitors
+105a(CCDC) - Auto install sysmon
 111(CCDC) - Receive all Jobs
 150a(CCDC) - STIG policies 2016
 150ab(CCDC) - Disable STIG policies 2016
