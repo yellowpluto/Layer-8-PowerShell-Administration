@@ -733,21 +733,22 @@ function New-PSSessions {
 	$split = Import-CSV "$PSScriptRoot\input.csv" | Select-Object -ExpandProperty "Host Name"
 	
 	foreach ($hostname in $split) {
-		$hostname = $hostname -split "\."
-		$hostname = $hostname[0]
 		$hostname | Out-File -FilePath "$PSScriptRoot\PSSessions.txt" -Append
 	}
 }
 
 #100a
 function Enable-PSRemotingInDomain {
-	$location = (Get-Location).Path
+	Start-Job -ScriptBlock {
+    $location = (Get-Location).Path
 	$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
 	Import-GPO -BackupGpoName 'WinRM' -TargetName 'WinRM' -Path "$location\Group Policy\WinRM" -CreateifNeeded
 	New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
 	Import-GPO -BackupGpoName 'RDP' -TargetName 'RDP' -Path "$location\Group Policy\RDP" -CreateifNeeded
 	New-GPLink -Name "RDP" -Target "$distN" -LinkEnabled Yes
 	gpupdate /force
+} -Name "PSRemotingInDomain"
+
 }
 
 #100ab (rushed)
@@ -765,7 +766,7 @@ function Disable-PSRemotingInDomain {
 
 #100b
 function Install-ChocolateyInDomain {
-	$newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+    $newPSSessions = Get-Content "$PSScriptRoot\PSSessions.txt"
 	Invoke-Command -ScriptBlock { Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) } -ComputerName $newPSSessions
 }
 
@@ -989,8 +990,15 @@ function Stop-SMBv1Remote {
 		else {
 			Write-Host "Failure"
 		}
-	} -ComputerName $newPSSessions
+	} -ComputerName $newPSSessions -Credential $credential
 	
+}
+
+#111 
+function Receive-Jobs {
+
+    Receive-Job -Name *
+
 }
 
 #150a
@@ -1286,6 +1294,13 @@ while ($start -eq $true) {
 			break
 
 		}
+
+        111 {
+        
+            Receive-Jobs
+            break
+        
+        }
 
 		150a {
 

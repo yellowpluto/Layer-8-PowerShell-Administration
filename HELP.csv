@@ -11,9 +11,10 @@ Local,Remote,Other
 100(CCDC) - New PowerShell Sessions
 100a(CCDC) - Enable PS Remoting on all machines across domain via GP (WinRM),100b(CCDC) - Install chocolatey
 100ab(CCDC) - Diable PS Remoting on all machines across domain
-101a(CCDC) - Get inventory (IP MAC & OS),101b(CCDC) - Get inventory (IP MAC & OS) Remotely
+101a(CCDC) - Get inventory (IP MAC & OS),101b(CCDC)(BROKEN) - Get inventory (IP MAC & OS) Remotely
 102a(CCDC) - Shuffle AD creds
 103a(CCDC) - Turn SMBv1 Off,103b(CCDC) Turn SMBv1 Off Remotely
 104a(CCDC) - User monitors
+111(CCDC) - Receive all Jobs
 150a(CCDC) - STIG policies 2016
-150ab(CCDC) - Dsiable STIG policies 2016
+150ab(CCDC) - Disable STIG policies 2016
