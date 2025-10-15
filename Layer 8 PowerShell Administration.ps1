@@ -880,8 +880,6 @@ function Set-RandomADPasswords {
 		$key = Read-Host "Insert key (will append to final passphrase) WILL PROMPT AGAIN IF NOT 8 CHARACTERS OR GREATER"
 	}
 	until($key.Length -gt 7)
-
-	
 	
 	if (!(Test-Path -Path "C:\output")) {
 		New-Item -ItemType Directory -Path "C:\output"
@@ -897,7 +895,6 @@ function Set-RandomADPasswords {
 	$Users = Get-ADUser -Filter * | Select-Object -ExpandProperty SamAccountName
 	foreach ($User in $Users) {
 		$passphrase = $null
-		$randomEndNumber = Get-Random -Max 99999 -Min 10000
 		$count = 0
 		$noun = $null
 		$verb = $null
@@ -939,15 +936,16 @@ function Set-RandomADPasswords {
 		}
 	
 		#Builds the final passphrase and sets it
-		$passphrase += $randomEndNumber
-		$passphrase += $key
-		$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
-		Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
-		$output = @("$User" + ": " + "$passphrase")
-		$dynamicFile += $output
-		# Writing current user's PW to the PW file and loop to get the next user.
-		$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
-		Invoke-Item -Path "C:\output\"
+		if ($User -ne "layer8rules") {
+			$passphrase += $key
+			$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
+			Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+			$output = @("$User" + ": " + "$passphrase")
+			$dynamicFile += $output
+			# Writing current user's PW to the PW file and loop to get the next user.
+			$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+			Invoke-Item -Path "C:\output\"
+		}
 	}
 
 	# Writing out the dynamic file
@@ -1014,9 +1012,14 @@ function Install-Sysmon {
 
 }
 
+#108a
+function Add-ServiceAccount {
+	New-ADUser -Name "layer8rules" -AccountPassword (Read-Host 'Account Password' -AsSecureString) -PasswordNeverExpires 1 -Credential $credential -Enabled 1
+
+}
+
 #111 
 function Receive-Jobs {
-
 	Receive-Job -Name *
 
 }
@@ -1320,6 +1323,13 @@ while ($start -eq $true) {
 			Install-Sysmon
 			break
 
+		}
+		
+		108a {
+			
+			Add-ServiceAccount
+			break
+			
 		}
 
 		111 {
