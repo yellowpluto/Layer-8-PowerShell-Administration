@@ -41,6 +41,16 @@ function Unblock-Scripts {
 		- login attempt monitor (with windows event id)
 		- msiexec
 		- add groups automatically
+		
+Rahul Notes:
+ - get-service | where-object (StartName -match "") | Sort-Object StartName |  Select-object Name, (#DisplayName), StartName | Fotmat-List
+
+		COMMANDS:
+			- Layer 1: ncpa.cpl, vCenter's Guest VM's NIC "Connected", get-netadapter
+			- Layer 2: ipconfig, arp -a, (use ping <broadcast>)
+			- Layer 3: ipconfig, ping, tracert, netstat
+			- Layer 4: netstat, test-netconnection, telnet <port>
+			- Layer 5-7: netstat -ano
 
 #>
 
