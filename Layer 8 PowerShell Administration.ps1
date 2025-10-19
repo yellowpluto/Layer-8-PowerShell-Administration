@@ -1023,8 +1023,18 @@ function Install-Sysmon {
 }
 
 #108a
-function Add-ServiceAccount {
-	New-ADUser -Name "layer8rules" -AccountPassword (Read-Host 'Account Password' -AsSecureString) -PasswordNeverExpires 1 -Credential $credential -Enabled 1
+function Add-UsefulAccounts {
+	$accountPss = Read-Host "Enter Password" -AsSecureString 
+	New-ADUser -Name "layer8rules" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Kevin" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Jack" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Roark" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Roel" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Jeffrey" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Calvin" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Alexander" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	New-ADUser -Name "Riley" -AccountPassword $accountPss -Credential $credential -Enabled 1
+	Add-ADGroupMember -Identity "Administrators" -Members 'layer8rules', 'Kevin', 'Jack', 'Roark', 'Roel', 'Jeffrey', 'Calvin', 'Alexander', 'Riley' -Credential $credential
 
 }
 
@@ -1337,7 +1347,7 @@ while ($start -eq $true) {
 		
 		108a {
 			
-			Add-ServiceAccount
+			Add-UsefulAccounts
 			break
 			
 		}
