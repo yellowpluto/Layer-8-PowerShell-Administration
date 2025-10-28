@@ -726,6 +726,14 @@ function New-ADUsers {
 	
 }
 
+#66a
+function Add-TrustedHosts {
+#Adds trusted hosts
+	$addTH = Read-Host "Add trusted hosts"
+	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
+	
+}
+
 #100
 function New-PSSessions {
 	New-Item "$PSScriptRoot\PSSessions.txt" -ErrorAction SilentlyContinue
@@ -744,24 +752,6 @@ function New-PSSessions {
 	
 	foreach ($hostname in $split) {
 		$hostname | Out-File -FilePath "$PSScriptRoot\PSSessions.txt" -Append
-	}
-}
-
-#66a
-function Add-TrustedHosts {
-	#Adds trusted hosts
-	$addTHcond = Read-Host "Add trusted hosts? [Y/N]"
-	if ($addTHcond -eq "Y") {
-		$addTH = Read-Host "Add trusted hosts"
-		Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
-	}
-	elseif ($addTHcond -eq "N") {
-		Write-Host -ForegroundColor Yellow "Ok"
-	}
-	else {
-		Write-Host -ForegroundColor Magenta "I'll do it anyways"
-		$addTH = Read-Host "Add trusted hosts"
-		Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
 	}
 }
 
