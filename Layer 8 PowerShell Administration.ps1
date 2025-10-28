@@ -80,6 +80,22 @@ if ($unblockScriptsCond -eq $true) {
 	Import-Module -Name "$PSScriptRoot\Private\lib\ImportExcel" -Verbose
 }
 
+
+#Adds trusted hosts
+$addTHcond = Read-Host "Add trusted hosts? [Y/N]"
+if ($addTHcond -eq "Y") {
+	$addTH = Read-Host "Add trusted hosts"
+	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
+}
+elseif ($addTHcond -eq "N") {
+	Write-Host -ForegroundColor Yellow "Ok"
+}
+else {
+	Write-Host -ForegroundColor Magenta "I'll do it anyways"
+	$addTH = Read-Host "Add trusted hosts"
+	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
+}
+
 <#
 
 	Import module commands end above
@@ -1068,6 +1084,13 @@ function Disable-2016STIGPolicies {
 	gpupdate /force
 }
 
+#1000a
+function Enter-PSSessions {
+	
+
+
+}
+
 <#
 
 	Functions for commands end above
@@ -1369,6 +1392,13 @@ while ($start -eq $true) {
 		150ab {
 
 			Disable-2016STIGPolicies
+			break
+
+		}
+
+		1000a {
+
+			Enter-PSSessions
 			break
 
 		}
