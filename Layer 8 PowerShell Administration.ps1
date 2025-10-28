@@ -80,22 +80,6 @@ if ($unblockScriptsCond -eq $true) {
 	Import-Module -Name "$PSScriptRoot\Private\lib\ImportExcel" -Verbose
 }
 
-
-#Adds trusted hosts
-$addTHcond = Read-Host "Add trusted hosts? [Y/N]"
-if ($addTHcond -eq "Y") {
-	$addTH = Read-Host "Add trusted hosts"
-	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
-}
-elseif ($addTHcond -eq "N") {
-	Write-Host -ForegroundColor Yellow "Ok"
-}
-else {
-	Write-Host -ForegroundColor Magenta "I'll do it anyways"
-	$addTH = Read-Host "Add trusted hosts"
-	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
-}
-
 <#
 
 	Import module commands end above
@@ -140,7 +124,7 @@ function Use-PingInfoView {
 	$netAdapDG = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object DefaultIPGateway 
 	Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object { Write-Output "[$count]$_"; $count++ }
 	$cnetAdapConf = Read-Host "Choose a number"
-	$netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet | Where-Object {$_ -like "255.*"}
+	$netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet | Where-Object { $_ -like "255.*" }
 	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
 	$netAdapDG = ($netAdapDG[$cnetAdapConf - 1]).DefaultIPGateway | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
 	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
@@ -763,6 +747,24 @@ function New-PSSessions {
 	}
 }
 
+#66a
+function Add-TrustedHosts {
+	#Adds trusted hosts
+	$addTHcond = Read-Host "Add trusted hosts? [Y/N]"
+	if ($addTHcond -eq "Y") {
+		$addTH = Read-Host "Add trusted hosts"
+		Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
+	}
+	elseif ($addTHcond -eq "N") {
+		Write-Host -ForegroundColor Yellow "Ok"
+	}
+	else {
+		Write-Host -ForegroundColor Magenta "I'll do it anyways"
+		$addTH = Read-Host "Add trusted hosts"
+		Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
+	}
+}
+
 #100a
 function Enable-PSRemotingInDomain {
 	Start-Job -ScriptBlock {
@@ -1284,6 +1286,13 @@ while ($start -eq $true) {
 		Below are CCDC Scripts
 		
 		#>
+
+		66a {
+
+			Add-TrustedHosts
+			break
+
+		}
 		
 		100 {
 
@@ -1393,10 +1402,10 @@ while ($start -eq $true) {
 		1000a {
 
 			$sessions = Get-Content "$PSScriptRoot\PSSessions.txt"
-			foreach($session in $sessions){
-			Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session"
+			foreach ($session in $sessions) {
+				Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session"
 			
-		}
+			}
 			break
 
 		}

@@ -8,6 +8,7 @@ Local,Remote,Other
 6a - Get rid of expiration date for specific users
 7a - Set email address for all users
 8a - Add AD users automatically
+66a(CCDC) - Add Trusted Hosts
 100(CCDC) - New PowerShell Sessions
 100a(CCDC) - Enable PS Remoting on all machines across domain via GP (WinRM),100b(CCDC) - Install chocolatey
 100ab(CCDC) - Diable PS Remoting on all machines across domain
@@ -20,4 +21,4 @@ Local,Remote,Other
 111(CCDC) - Receive all Jobs
 150a(CCDC) - STIG policies 2016
 150ab(CCDC) - Disable STIG policies 2016
-,1000a(CCDC)(UF) - Enter PSSessions,
+,1000a(CCDC) - Enter PSSessions,
