@@ -140,7 +140,7 @@ function Use-PingInfoView {
 	$netAdapDG = Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object DefaultIPGateway 
 	Get-CimInstance Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty Description | ForEach-Object { Write-Output "[$count]$_"; $count++ }
 	$cnetAdapConf = Read-Host "Choose a number"
-	$netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet
+	$netAdapConf = ($netAdapConf[$cnetAdapConf - 1]).IpSubnet | Where-Object {$_ -like "255.*"}
 	$netAdapIP = ($netAdapIP[$cnetAdapConf - 1]).IPAddress | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
 	$netAdapDG = ($netAdapDG[$cnetAdapConf - 1]).DefaultIPGateway | Where-Object { ($_ -like "192.*") -or ($_ -like "172.*") -or ($_ -like "10.*") }
 	$netAdapConf = $netAdapConf.Split('.') | ForEach-Object {
@@ -750,7 +750,7 @@ function New-PSSessions {
 		Clear-Content -Path "$PSScriptRoot\PSSessions.txt"
 	}
 	
-	Write-Host -ForegroundColor Yellow "Looking for 'input.txt' in script root folder"
+	Write-Host -ForegroundColor Yellow "Looking for 'input.csv' in script root folder"
 	while (!(Test-Path -Path "$PSScriptRoot\input.csv")) {
 	}
 	
@@ -978,6 +978,7 @@ function Set-RandomADPasswords {
 		
 	$fileName = "pwFile_$t"
 	$dynamicFile | Out-File -FilePath "C:\output\$fileName.txt"
+	$dynamicFile | Out-File -FilePath "C:\output\$fileName.csv"
 
 }
 
@@ -1086,7 +1087,7 @@ function Disable-2016STIGPolicies {
 
 #1000a
 function Enter-PSSessions {
-	
+
 
 
 }
