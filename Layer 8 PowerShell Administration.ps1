@@ -1393,7 +1393,7 @@ while ($start -eq $true) {
 
 			$sessions = Get-Content "$PSScriptRoot\PSSessions.txt"
 			foreach ($session in $sessions) {
-				Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session"
+				Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session -Credential (Get-Credential)"
 			
 			}
 			break
