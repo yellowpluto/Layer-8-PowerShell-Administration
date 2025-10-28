@@ -1085,13 +1085,6 @@ function Disable-2016STIGPolicies {
 	gpupdate /force
 }
 
-#1000a
-function Enter-PSSessions {
-
-
-
-}
-
 <#
 
 	Functions for commands end above
@@ -1399,7 +1392,11 @@ while ($start -eq $true) {
 
 		1000a {
 
-			Enter-PSSessions
+			$sessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+			foreach($session in $sessions){
+			Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session"
+			
+		}
 			break
 
 		}
