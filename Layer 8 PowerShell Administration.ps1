@@ -751,7 +751,7 @@ function New-PSSessions {
 	$split = Import-CSV "$PSScriptRoot\input.csv" | Select-Object -ExpandProperty "Host Name"
 	
 	foreach ($hostname in $split) {
-		$hostname | Out-File -FilePath "$PSScriptRoot\PSSessions.txt" -Append
+		$hostname | Sort-Object | Out-File -FilePath "$PSScriptRoot\PSSessions.txt" -Append
 	}
 }
 
