@@ -1430,6 +1430,7 @@ while ($start -eq $true) {
 		quit {
 			
 			$start = $false
+			Remove-Item "$env:TEMP\session-cred.xml"
 			break
 
 		}
