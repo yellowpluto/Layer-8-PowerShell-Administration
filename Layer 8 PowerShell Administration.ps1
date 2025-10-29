@@ -1392,10 +1392,13 @@ while ($start -eq $true) {
 		1000a {
 
 			$sessions = Get-Content "$PSScriptRoot\PSSessions.txt"
+			$credPath = "$env:TEMP\session-cred.xml"
+			$credential | Export-Clixml -Path $credPath
+
 			foreach ($session in $sessions) {
-				Start-Process pwsh.exe -ArgumentList "-noexit", "Enter-PSSession -ComputerName $session -Credential (Get-Credential)"
-			
+			Start-Process pwsh -ArgumentList "-NoExit", "-Command", "`$cred = Import-Clixml -Path '$credPath'; Enter-PSSession -ComputerName '$session' -Credential `$cred"
 			}
+			
 			break
 
 		}
