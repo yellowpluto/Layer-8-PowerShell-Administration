@@ -1407,6 +1407,17 @@ while ($start -eq $true) {
 
 		}
 
+		1000b {
+			
+			Set-Location ..
+			$Session = New-PSSession -ComputerName (Get-Content "$PSScriptRoot\PSSessions.txt") -Credential $credential
+			Copy-Item ".\Layer-8-PowerShell-Administration-main\" -Destination "C:\" -ToSession $Session -Recurse
+			Set-Location ".\Layer-8-PowerShell-Administration-main\"
+
+			break
+
+		}
+
 		#Help
 		? {
 	
