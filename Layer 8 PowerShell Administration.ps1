@@ -703,8 +703,8 @@ function New-ADUsers {
 		$count = 1
 		
 		try {
-			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "0$count" + "@$domainName") -EmailAddress ("$fInit" + "$lName" + "0$count" + "@$domainName") -ErrorAction Stop
-			Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName" + "0$count")
+			New-ADUser -Name "$fName $lName" -AccountPassword $secureStr -ChangePasswordAtLogon $true -Credential $credential -DisplayName "$fName $lName" -Enabled $true -GivenName "$fName" -Surname "$lName" -UserPrincipalName ("$fInit" + "$lName" + "@$domainName") -EmailAddress ("$fInit" + "$lName" + "@$domainName") -ErrorAction Stop
+			Set-ADUser -Identity "$fName $lName" -SamAccountName ("$fInit" + "$lName")
 			Write-Host -ForegroundColor Cyan "Great!"
 		}
 		catch {
