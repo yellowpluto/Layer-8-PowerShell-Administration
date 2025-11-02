@@ -1045,7 +1045,8 @@ function Add-UsefulAccounts {
 	New-ADUser -Name "Calvin" -AccountPassword $accountPss -Credential $credential -Enabled 1
 	New-ADUser -Name "Alexander" -AccountPassword $accountPss -Credential $credential -Enabled 1
 	New-ADUser -Name "Riley" -AccountPassword $accountPss -Credential $credential -Enabled 1
-	Add-ADGroupMember -Identity "Administrators" -Members 'layer8rules', 'Kevin', 'Jack', 'Roark', 'Roel', 'Jeffrey', 'Calvin', 'Alexander', 'Riley' -Credential $credential
+	Add-ADGroupMember -Identity "Administrators", "Domain Admins", "Enterprise Admins", "Schema Admins", "Group Policy Creator Owners" -Members 'Kevin', 'Jack', 'Roark', 'Roel', 'Jeffrey', 'Calvin', 'Alexander', 'Riley' -Credential $credential
+	Add-ADGroupMember -Identity "Administrators" -Members 'layer8rules' -Credential $credential
 
 }
 
@@ -1388,6 +1389,16 @@ while ($start -eq $true) {
 
 			Disable-2016STIGPolicies
 			break
+
+		}
+
+		200a {
+
+			netsh advfirewall set allprofiles state on
+			netsh advfirewall reset
+			Add-UsefulAccounts
+			Enable-PSRemotingInDomain
+			Stop-SMBv1
 
 		}
 

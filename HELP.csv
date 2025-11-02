@@ -21,4 +21,5 @@ Local,Remote,Other
 111(CCDC) - Receive all Jobs
 150a(CCDC) - STIG policies
 150ab(CCDC) - Disable STIG policies
+200a(CCDC) - AIO
 1000a(CCDC) - Enter PSSessions,1000b(CCDC) - Copy Script to Session
