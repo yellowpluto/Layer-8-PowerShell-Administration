@@ -78,6 +78,7 @@ else {
 
 if ($unblockScriptsCond -eq $true) {
 	Import-Module -Name "$PSScriptRoot\Private\lib\ImportExcel" -Verbose
+	Import-Module -Name "$PSScriptRoot\Private\lib\PSWindowsUpdate" -Verbose
 }
 
 <#
@@ -1348,8 +1349,8 @@ while ($start -eq $true) {
 
 		104a {
 
-			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\userPasswordMonitor.ps1
-			Start-Process -FilePath "pwsh" -ArgumentList $PSScriptRoot\Scripts\userLogonMonitor.ps1
+			Start-Process -FilePath "powershell" -ArgumentList $PSScriptRoot\Scripts\userPasswordMonitor.ps1
+			Start-Process -FilePath "powershell" -ArgumentList $PSScriptRoot\Scripts\userLogonMonitor.ps1
 			break
 
 		}
