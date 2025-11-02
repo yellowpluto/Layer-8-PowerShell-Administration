@@ -765,6 +765,8 @@ function Enable-PSRemotingInDomain {
 		New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
 		Import-GPO -BackupGpoName 'RDP' -TargetName 'RDP' -Path "$location\Group Policy\RDP" -CreateifNeeded
 		New-GPLink -Name "RDP" -Target "$distN" -LinkEnabled Yes
+		Import-GPO -BackupGpoName 'Essentials' -TargetName 'Essentials' -Path "$location\Group Policy\Essentials" -CreateifNeeded
+		New-GPLink -Name "Essentials" -Target "$distN" -LinkEnabled Yes
 		gpupdate /force
 	} -Name "PSRemotingInDomain"
 
@@ -775,6 +777,7 @@ function Disable-PSRemotingInDomain {
 	$count = 1
 	Remove-GPO "WinRM"
 	Remove-GPO "RDP"
+	Remove-GPO "Essentials"
 	Get-ADComputer -Filter * | Select-Object -ExpandProperty Name | ForEach-Object {
 		Invoke-Command -ScriptBlock { gpupdate /force } -ComputerName $_ -JobName "GPU$count" -AsJob
 		$count++
