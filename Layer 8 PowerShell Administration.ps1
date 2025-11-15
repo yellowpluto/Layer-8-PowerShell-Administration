@@ -960,7 +960,7 @@ function Set-RandomADPasswords {
 			$passphrase += $key
 			$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
 			Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
-			$output = @("$User" + ": " + "$passphrase")
+			$output = @("$User," + "$passphrase")
 			$dynamicFile += $output
 			# Writing current user's PW to the PW file and loop to get the next user.
 			$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
