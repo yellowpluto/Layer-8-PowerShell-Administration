@@ -760,10 +760,6 @@ function New-PSSessions {
 function Enable-PSRemotingInDomain {
 	$location = (Get-Location).Path
 	$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
-	Import-GPO -BackupGpoName 'WinRM' -TargetName 'WinRM' -Path "$location\Group Policy\WinRM" -CreateifNeeded
-	New-GPLink -Name "WinRM" -Target "$distN" -LinkEnabled Yes
-	Import-GPO -BackupGpoName 'RDP' -TargetName 'RDP' -Path "$location\Group Policy\RDP" -CreateifNeeded
-	New-GPLink -Name "RDP" -Target "$distN" -LinkEnabled Yes
 	Import-GPO -BackupGpoName 'Essentials' -TargetName 'Essentials' -Path "$location\Group Policy\Essentials" -CreateifNeeded
 	New-GPLink -Name "Essentials" -Target "$distN" -LinkEnabled Yes
 	gpupdate /force
