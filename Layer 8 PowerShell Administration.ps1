@@ -1056,30 +1056,6 @@ function Receive-Jobs {
 
 }
 
-#150a
-function Enable-2016STIGPolicies {
-	$location = (Get-Location).Path
-	$distN = Get-ADDomain | Select-Object -ExpandProperty DistinguishedName
-	Import-GPO -BackupGpoName 'DoD WinSvr 2016 DC STIG Comp v2r10' -TargetName 'DoD WinSvr 2016 DC STIG Comp v2r10' -Path "$location\Group Policy\DoD WinSvr 2016 DC STIG Comp v2r10" -CreateifNeeded
-	New-GPLink -Name "DoD WinSvr 2016 DC STIG Comp v2r10" -Target "$distN" -LinkEnabled Yes
-	Import-GPO -BackupGpoName 'DoD WinSvr 2016 DC STIG User v2r10' -TargetName 'DoD WinSvr 2016 DC STIG User v2r10' -Path "$location\Group Policy\DoD WinSvr 2016 DC STIG User v2r10" -CreateifNeeded
-	New-GPLink -Name "DoD WinSvr 2016 DC STIG User v2r10" -Target "$distN" -LinkEnabled Yes
-	gpupdate /force
-}
-
-#150ab (rushed)
-function Disable-2016STIGPolicies {
-	$count = 1
-	Remove-GPO "DoD WinSvr 2016 DC STIG Comp v2r10"
-	Remove-GPO "DoD WinSvr 2016 DC STIG User v2r10"
-	Get-ADComputer -Filter * | Select-Object -ExpandProperty Name | ForEach-Object {
-		Invoke-Command -ScriptBlock { gpupdate /force } -ComputerName $_ -JobName "GPU$count" -AsJob
-		$count++
-	}
-
-	gpupdate /force
-}
-
 <#
 
 	Functions for commands end above
@@ -1376,20 +1352,6 @@ while ($start -eq $true) {
 			Receive-Jobs
 			break
         
-		}
-
-		150a {
-
-			Enable-2016STIGPolicies
-			break
-
-		}
-
-		150ab {
-
-			Disable-2016STIGPolicies
-			break
-
 		}
 
 		200a {
