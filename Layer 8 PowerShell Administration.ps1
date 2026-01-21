@@ -729,7 +729,7 @@ function New-ADUsers {
 
 #66a
 function Add-TrustedHosts {
-#Adds trusted hosts
+	#Adds trusted hosts
 	$addTH = Read-Host "Add trusted hosts"
 	Set-Item WSMan:\localhost\Client\TrustedHosts -Value "$addTH" -Force
 	
@@ -1031,7 +1031,8 @@ function Install-Sysmon {
 
 #108a
 function Add-UsefulAccounts {
-	$accountPss = Read-Host "Enter Password" -AsSecureString 
+
+	$accountPss = Read-Host "Enter Jargin" -AsSecureString 
 	New-ADUser -Name "layer8rules" -AccountPassword $accountPss -Credential $credential -Enabled 1
 	New-ADUser -Name "Kevin" -AccountPassword $accountPss -Credential $credential -Enabled 1
 	New-ADUser -Name "Jack" -AccountPassword $accountPss -Credential $credential -Enabled 1
@@ -1048,7 +1049,143 @@ function Add-UsefulAccounts {
 	Add-ADGroupMember -Identity "Group Policy Creator Owners" -Members 'Kevin', 'Jack', 'Roark', 'Roel', 'Jeffrey', 'Calvin', 'Alexander', 'Riley' -Credential $credential
 	Add-ADGroupMember -Identity "Administrators" -Members 'layer8rules' -Credential $credential
 
+	# 3 words per passphrase logic
+	while ($count -lt 9) {
+		$txtFile = Get-Random -Max 4 -Min 1
+		$passphrase = $null
+		$count = 0
+		$noun = $null
+		$verb = $null
+		$adjective = $null
+		switch ($txtFile) {
+			1 {
+				# We don't want repeats of words
+				if ($null -ne $noun) {
+					break
+				}
+				$noun = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Nouns.txt")
+				$count++
+				$passphrase += $noun + "-"
+			}
+
+			2 {
+				if ($null -ne $verb) {
+					break
+				} 
+				$verb = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Verbs.txt")
+				$count++
+				$passphrase += $verb + "-"
+			   
+			}
+
+			3 {
+				if ($null -ne $adjective) {
+					break
+				}
+				$adjective = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Adjectives.txt")
+				$count++
+				$passphrase += $adjective + "-"
+			}
+
+		}
+	
+		#Builds the final passphrase and sets it
+	
+		$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
+		switch ($count) {
+			1 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			2 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			3 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			4 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			5 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			6 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			7 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			8 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+
+			9 {
+
+				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				$output = @("$User," + "$passphrase")
+				$dynamicFile += $output
+				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+
+			}
+		}
+	}
+	
+	Invoke-Item -Path "C:\output\"
+
+	# Writing out the dynamic file
+		
+	$fileName = "pwFile_$t"
+	$dynamicFile | Out-File -FilePath "C:\output\$fileName.txt"
+	$dynamicFile | Out-File -FilePath "C:\output\$fileName.csv"
+
 }
+
 
 #111 
 function Receive-Jobs {
@@ -1306,7 +1443,7 @@ while ($start -eq $true) {
 			$credential | Export-Clixml -Path $credPath
 
 			foreach ($session in $sessions) {
-			Start-Process pwsh -ArgumentList "-NoExit", "-Command", "`$cred = Import-Clixml -Path '$credPath'; Enter-PSSession -ComputerName '$session' -Credential `$cred"
+				Start-Process pwsh -ArgumentList "-NoExit", "-Command", "`$cred = Import-Clixml -Path '$credPath'; Enter-PSSession -ComputerName '$session' -Credential `$cred"
 			}
 			
 			break
