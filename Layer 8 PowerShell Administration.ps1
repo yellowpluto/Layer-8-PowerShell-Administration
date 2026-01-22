@@ -1051,57 +1051,64 @@ function Add-UsefulAccounts {
 
 	# 3 words per passphrase logic
 	$numOfNames = 0
-	while ($numOfNames -lt 10){
+
+	do {
+		$key = Read-Host "Insert key (will append to final passphrase) WILL PROMPT AGAIN IF NOT 8 CHARACTERS OR GREATER"
+	}
+	until($key.Length -gt 7)
+
+	while ($numOfNames -lt 10) {
 		$count = 0
 		$passphrase = $null
 		$noun = $null
 		$verb = $null
 		$adjective = $null
-	while ($count -lt 4) {
-		$txtFile = Get-Random -Max 4 -Min 1
-		switch ($txtFile) {
-			1 {
-				# We don't want repeats of words
-				if ($null -ne $noun) {
-					break
+		while ($count -lt 3) {
+			$txtFile = Get-Random -Max 4 -Min 1
+			switch ($txtFile) {
+				1 {
+					# We don't want repeats of words
+					if ($null -ne $noun) {
+						break
+					}
+					$noun = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Nouns.txt")
+					$count++
+					$passphrase += $noun + "-"
 				}
-				$noun = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Nouns.txt")
-				$count++
-				$passphrase += $noun + "-"
-			}
 
-			2 {
-				if ($null -ne $verb) {
-					break
-				} 
-				$verb = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Verbs.txt")
-				$count++
-				$passphrase += $verb + "-"
+				2 {
+					if ($null -ne $verb) {
+						break
+					} 
+					$verb = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Verbs.txt")
+					$count++
+					$passphrase += $verb + "-"
 			   
-			}
-
-			3 {
-				if ($null -ne $adjective) {
-					break
 				}
-				$adjective = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Adjectives.txt")
-				$count++
-				$passphrase += $adjective + "-"
-			}
 
-		}
+				3 {
+					if ($null -ne $adjective) {
+						break
+					}
+					$adjective = Get-Random -InputObject (Get-Content "$PSScriptRoot\Passphrases\Adjectives.txt")
+					$count++
+					$passphrase += $adjective + "-"
+				}
+
+			}
 	
-	}
+		}
 	
 		#Builds the final passphrase and sets it
 	
+		$passphrase += $key
 		$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
 		$numOfNames++
 		switch ($numOfNames) {
 			1 {
 
 				Set-ADAccountPassword -Identity "layer8rules" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("layer8rules," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1109,7 +1116,7 @@ function Add-UsefulAccounts {
 			2 {
 
 				Set-ADAccountPassword -Identity "Kevin" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Kevin," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1117,7 +1124,7 @@ function Add-UsefulAccounts {
 			3 {
 
 				Set-ADAccountPassword -Identity "Jack" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Jack," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1125,7 +1132,7 @@ function Add-UsefulAccounts {
 			4 {
 
 				Set-ADAccountPassword -Identity "Roark" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Roark," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1133,7 +1140,7 @@ function Add-UsefulAccounts {
 			5 {
 
 				Set-ADAccountPassword -Identity "Roel" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Roel," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1141,7 +1148,7 @@ function Add-UsefulAccounts {
 			6 {
 
 				Set-ADAccountPassword -Identity "Jeffrey" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Jeffrey," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1149,7 +1156,7 @@ function Add-UsefulAccounts {
 			7 {
 
 				Set-ADAccountPassword -Identity "Calvin" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Calvin," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1157,7 +1164,7 @@ function Add-UsefulAccounts {
 			8 {
 
 				Set-ADAccountPassword -Identity "Alexander" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Alexander," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
@@ -1165,15 +1172,13 @@ function Add-UsefulAccounts {
 			9 {
 
 				Set-ADAccountPassword -Identity "Riley" -NewPassword $securePassword -Credential $credential
-				$output = @("$User," + "$passphrase")
+				$output = @("Riley," + "$passphrase")
 				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 		}
 
 	}
-	
-	Invoke-Item -Path "C:\output\"
 
 }
 
@@ -1406,6 +1411,7 @@ while ($start -eq $true) {
 		108a {
 			
 			Add-UsefulAccounts
+			Invoke-Item -Path "C:\output\"
 			break
 			
 		}
