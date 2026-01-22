@@ -1050,13 +1050,15 @@ function Add-UsefulAccounts {
 	Add-ADGroupMember -Identity "Administrators" -Members 'layer8rules' -Credential $credential
 
 	# 3 words per passphrase logic
-	while ($count -lt 9) {
-		$txtFile = Get-Random -Max 4 -Min 1
-		$passphrase = $null
+	$numOfNames = 0
+	while ($numOfNames -lt 10){
 		$count = 0
+		$passphrase = $null
 		$noun = $null
 		$verb = $null
 		$adjective = $null
+	while ($count -lt 4) {
+		$txtFile = Get-Random -Max 4 -Min 1
 		switch ($txtFile) {
 			1 {
 				# We don't want repeats of words
@@ -1089,100 +1091,89 @@ function Add-UsefulAccounts {
 
 		}
 	
+	}
+	
 		#Builds the final passphrase and sets it
 	
 		$securePassword = ConvertTo-SecureString -String $passphrase -AsPlainText -Force
-		switch ($count) {
+		$numOfNames++
+		switch ($numOfNames) {
 			1 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "layer8rules" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			2 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Kevin" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			3 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Jack" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			4 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Roark" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			5 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Roel" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			6 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Jeffrey" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			7 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Calvin" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			8 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Alexander" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 
 			9 {
 
-				Set-ADAccountPassword -Identity $User -NewPassword $securePassword -Credential $credential
+				Set-ADAccountPassword -Identity "Riley" -NewPassword $securePassword -Credential $credential
 				$output = @("$User," + "$passphrase")
-				$dynamicFile += $output
-				$output | Out-File -FilePath "C:\output\$fileName.txt" -Append
+				$output | Out-File -FilePath "C:\output\AdminUsers.txt" -Append
 
 			}
 		}
+
 	}
 	
 	Invoke-Item -Path "C:\output\"
-
-	# Writing out the dynamic file
-		
-	$fileName = "pwFile_$t"
-	$dynamicFile | Out-File -FilePath "C:\output\$fileName.txt"
-	$dynamicFile | Out-File -FilePath "C:\output\$fileName.csv"
 
 }
 
